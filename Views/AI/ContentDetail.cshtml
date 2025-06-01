@@ -1,0 +1,418 @@
+@model AIContent
+@{
+    ViewData["Title"] = "AI Content Submission";
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Recipe Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #f8f9fa;
+            color: #333;
+        }
+
+        nav {
+            background-color: #4B7322;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .left,
+        nav .right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        nav .left span {
+            color: white;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.6rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+            transition: color 0.3s;
+        }
+
+        nav a:hover {
+            color: #00FFAA;
+        }
+
+        .right a:first-child {
+            background-color: black;
+            color: #00FFAA;
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+        }
+
+        .right a:last-child {
+            border: 2px solid white;
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+        }
+
+        .title-section {
+            font-size: 28px;
+            font-weight: bold;
+            color: #4B7322;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .top-bar input[type="text"] {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            width: 300px;
+            font-size: 14px;
+        }
+
+        .filter {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .filter select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            font-size: 14px;
+            background-color: #fff;
+        }
+
+        .article-section {
+            margin-top: 20px;
+        }
+
+        .article-section h2 {
+            font-size: 24px;
+            color: #4B7322;
+            margin-bottom: 20px;
+            text-align: center;
+            border-bottom: 2px solid #4B7322;
+            padding-bottom: 10px;
+        }
+
+        .recipe-article {
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s ease;
+        }
+
+        .recipe-article:hover {
+            transform: translateY(-5px);
+        }
+
+        .recipe-image {
+            margin-bottom: 15px;
+        }
+
+        .recipe-image img {
+            width: 100%;
+            max-width: 400px;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 8px;
+            border: 1px solid #e0e0e0;
+            display: block;
+            margin: 0 auto;
+            transition: transform 0.3s ease;
+        }
+
+        .recipe-image img:hover {
+            transform: scale(1.05);
+        }
+
+        .recipe-content {
+            text-align: center;
+        }
+
+        .recipe-content h3 {
+            font-size: 22px;
+            color: #4B7322;
+            margin: 0 0 10px;
+        }
+
+        .recipe-content p {
+            font-size: 16px;
+            line-height: 1.6;
+            color: #555;
+            margin: 0 0 15px;
+            white-space: pre-wrap;
+            /* Giữ nguyên định dạng từ database */
+        }
+
+        .recipe-actions {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 10px;
+        }
+
+        .recipe-actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            color: #4B7322;
+            display: flex;
+            align-items: center;
+            gap: 5px;
+            transition: color 0.3s;
+        }
+
+        .recipe-actions button:hover {
+            color: #00FFAA;
+        }
+
+        .recipe-actions button.trash {
+            color: red;
+        }
+
+        .recipe-actions button.trash:hover {
+            color: darkred;
+        }
+
+        .comment-box {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            z-index: 1001;
+            width: 400px;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+        }
+
+        .comment-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .comment-item button {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-top: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #8a8a8a;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            width: 300px;
+            text-align: center;
+            border-radius: 8px;
+        }
+
+        .confirm-dialog button {
+            margin: 10px;
+            padding: 7px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .confirm-dialog .delete {
+            background-color: red;
+            color: white;
+        }
+
+        .confirm-dialog .cancel {
+            background-color: #8a8a8a;
+            color: white;
+        }
+
+        .media (max-width: 768px) {
+            .main-container {
+                margin: 20px;
+                padding: 15px;
+            }
+
+            .top-bar input[type="text"] {
+                width: 100%;
+            }
+
+            .recipe-image img {
+                max-width: 100%;
+                height: 180px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Navbar -->
+    <nav>
+        <div class="left">
+            <a href="/">
+                <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
+            </a>
+            <span>Bếp AI</span>
+            <a href="/">Home</a>
+            <a href="#">Cộng đồng</a>
+            <a href="/contact/contact">Contact</a>
+            <a href="#">Quản lý bài viết</a>
+            <a href="#">Quản lý tài khoản</a>
+        </div>
+        <div class="right">
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <a href="/home"
+                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">Chào
+                    mừng: @User.Identity.Name</a>
+                <a href="/account/logout"
+                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
+                    XUẤT</a>
+            }
+            else
+            {
+                <a href="/account/login"
+                    style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
+                    NHẬP</a>
+            }
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="top-bar">
+            <div class="title-section">Khám Phá Những Món Ngon Việt Nam</div>
+            <input type="text" placeholder="Tìm kiếm món ăn..." />
+        </div>
+
+        <div class="filter">
+            <label style="margin-right: 10px;">Điều kiện lọc:</label>
+            <select>
+                <option>Tất cả</option>
+                <option>Đã đăng</option>
+                <option>Chờ duyệt</option>
+                <option>Đã xóa</option>
+            </select>
+        </div>
+
+        <div class="article-section">
+            <h2>Công Thức Nấu Ăn Hấp Dẫn</h2>
+
+
+            <div class="recipe-article">
+                <div class="recipe-image">
+                    <img src="@Url.Content("~/image_ai/" + @Model.ImageUrl)" alt="@Model.Title" />
+                </div>
+                <div class="recipe-content">
+                    <h3>@Model.Title</h3>
+                    <p>@Model.Content</p>
+                    <div class="recipe-actions">
+                        <button onclick="showComments('@Model.Title')"><i class="fas fa-comment"></i> Bình luận</button>
+                        <button class="trash" onclick="confirmDelete(() => alert('Đã xóa món: @Model.Title'))"><i
+                                class="fas fa-trash"></i> Xóa</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="comment-box" id="commentBox">
+        <h4>Bình luận</h4>
+        <div id="commentList"></div>
+        <button onclick="document.getElementById('commentBox').style.display='none'">Đóng</button>
+    </div>
+
+    <div class="confirm-dialog" id="confirmDialog">
+        <p id="confirmText">Bạn chắc chắn muốn xóa món ăn này không?</p>
+        <button class="delete" onclick="confirmDeleteAction()">Tiếp tục xóa</button>
+        <button class="cancel" onclick="closeDialog()">Hủy</button>
+    </div>
+
+    <script>
+        let currentDeleteAction = null;
+
+        function confirmDelete(action) {
+            currentDeleteAction = action || function () { alert("Đã xóa món ăn!"); };
+            document.getElementById("confirmDialog").style.display = "block";
+        }
+
+        function confirmDeleteAction() {
+            if (currentDeleteAction) currentDeleteAction();
+            closeDialog();
+        }
+
+        function closeDialog() {
+            document.getElementById("confirmDialog").style.display = "none";
+        }
+
+        function showComments(postTitle) {
+            const comments = [
+                "Món ăn này thật tuyệt vời!",
+                "Tôi đã thử và rất thích, cảm ơn công thức!",
+                "Hãy chia sẻ thêm nhiều món nữa nhé!"
+            ];
+            const list = document.getElementById("commentList");
+            list.innerHTML = '';
+            comments.forEach((comment, index) => {
+                const div = document.createElement('div');
+                div.className = 'comment-item';
+                div.innerHTML = `<p>${comment}</p><button onclick="confirmDelete(() => this.parentElement.remove())">Xóa</button>`;
+                list.appendChild(div);
+            });
+            document.getElementById("commentBox").style.display = "block";
+        }
+    </script>
+</body>
+
+</html>

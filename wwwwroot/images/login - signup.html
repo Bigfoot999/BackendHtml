@@ -1,0 +1,159 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>cookAIfood Login</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+    body {
+      display: flex;
+      height: 100vh;
+      background-color: #fffdf9;
+    }
+    .left {
+      flex: 1;
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      grid-template-rows: repeat(2, 1fr);
+      gap: 5px;
+      padding: 10px;
+      background-color: #F2C53D;
+      height: 100vh;
+    }
+    .left img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      border-radius: 8px;
+    }
+    .right {
+      flex: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fffefc;
+      padding: 40px;
+      box-shadow: -4px 0 10px rgba(0, 0, 0, 0.05);
+      max-width: 50vw;
+      height: 100vh;
+    }
+    .form-box {
+      width: 100%;
+      max-width: 350px;
+      display: none;
+    }
+    .form-box.active {
+      display: block;
+    }
+    h2 {
+      font-size: 28px;
+      margin-bottom: 20px;
+      color: #2d2d2d;
+    }
+    input[type="email"], input[type="password"], input[type="text"] {
+      width: 100%;
+      padding: 10px 12px;
+      margin-bottom: 15px;
+      border: 1px solid #F2B950;
+      border-radius: 6px;
+      font-size: 14px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      border: none;
+      border-radius: 6px;
+      background-color: #4B7322;
+      color: white;
+      font-size: 16px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+    button:hover {
+      background-color: #D9933D;
+    }
+    .divider {
+      text-align: center;
+      margin: 10px 0;
+      color: #999;
+      font-size: 12px;
+    }
+    .privacy {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #6e4b1f;
+      text-align: center;
+    }
+    .switch-link {
+      font-size: 13px;
+      color: #D95F18;
+      text-align: center;
+      cursor: pointer;
+      margin-top: 15px;
+    }
+    .logo {
+      text-align: center;
+      margin-bottom: 20px;
+    }
+    .logo img {
+      width: 150px;  /* Adjust size of the logo */
+    }
+  </style>
+</head>
+<body>
+  <div class="left">
+    <img src="https://phongvu.vn/cong-nghe/wp-content/uploads/2020/10/Meo-chup-anh-do-an-nhu-food-blogger.jpg" alt="food1">
+    <img src="https://images.squarespace-cdn.com/content/v1/53883795e4b016c956b8d243/1550052451758-LL5DACGHWUM1MEAI6HOA/chup-anh-mon-an-com-ga-thuong-hai-8.jpg" alt="food2">
+    <img src="https://jaybranding.com/wp-content/uploads/2023/05/chup-anh-thuc-an-food-photography-22.jpg" alt="food3">
+    <img src="https://spicyfoodstudio.com/wp-content/uploads/2023/03/chup-anh-do-an-01.jpg" alt="food4">
+    <img src="https://static.vinwonders.com/production/vietnam-food-tourism-2.jpg" alt="food5">
+    <img src="https://chuphinhmonan.com/wp-content/uploads/2017/03/avalon-1.jpg" alt="food6">
+  </div>
+  <div class="right">
+    <div class="form-box active" id="login-form">
+      <div class="logo">
+        <img src="/Users/anhthu/Downloads/logo_bepai_no_bg.png" alt="Bep AI Logo">
+      </div>
+      <h2>Đăng nhập</h2>
+      <input type="email" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <button type="submit">Đăng nhập</button>
+      <div class="divider">hoặc</div>
+      <div class="switch-link" onclick="showForm('signup-form')">Chưa có tài khoản? Đăng ký</div>
+      <div class="switch-link" onclick="showForm('reset-form')">Quên mật khẩu? Đặt lại</div>
+    </div>
+
+    <div class="form-box" id="signup-form">
+      <h2>Tạo tài khoản</h2>
+      <input type="text" placeholder="Username" />
+      <input type="email" placeholder="Email" />
+      <input type="password" placeholder="Password" />
+      <button type="submit">Đăng ký</button>
+      <div class="privacy"> Bằng việc đăng ký, bạn đồng ý chính sách <a href="#">Privacy Policy</a> và <a href="#">Terms of Service</a>.</div>
+      <div class="switch-link" onclick="showForm('login-form')"> Đã có tài khoản? Đăng nhập</div>
+    </div>
+
+    <div class="form-box" id="reset-form">
+      <h2>Đặt lại mật khẩu</h2>
+      <input type="email" placeholder="Email" />
+      <button type="submit">Gửi link</button>
+      <div class="switch-link" onclick="showForm('login-form')">Trở về đăng nhập</div>
+    </div>
+  </div>
+
+  <script>
+    function showForm(formId) {
+      const forms = document.querySelectorAll('.form-box');
+      forms.forEach(form => form.classList.remove('active'));
+      document.getElementById(formId).classList.add('active');
+    }
+  </script>
+</body>
+</html>

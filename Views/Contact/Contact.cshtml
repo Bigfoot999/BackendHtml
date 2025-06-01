@@ -1,0 +1,387 @@
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@model BackendHtml.Models.Contact
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bếp AI - Chia sẻ công thức nấu ăn</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fff;
+        }
+
+        header {
+            background-color: #4d7420;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        .icon {
+            height: 20px;
+            margin-right: 10px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-login,
+        .btn-signup,
+        .btn-create,
+        #sendcontact button,
+        .search-bar button {
+            padding: 12px 24px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: bold;
+            display: block;
+            margin: 20px auto 0 auto;
+        }
+
+        .btn-login {
+            background-color: black;
+            color: #00ffc8;
+        }
+
+        .btn-signup {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-create,
+        .search-bar button,
+        #sendcontact button {
+            background-color: #f9a825;
+            color: white;
+
+        }
+
+        .container {
+            display: flex;
+        }
+
+        .left,
+        .right {
+            flex: 1;
+            padding: 20px;
+
+        }
+
+        .box {
+
+            padding: 20px;
+            border-radius: 12px;
+
+        }
+
+        .titlecontact {
+            color: #4b7322;
+            font-size: 24px;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        th,
+        td {
+            border: 1px solid #ccc;
+            padding: 8px;
+            color: #fff;
+
+        }
+
+        td {
+            text-align: center;
+            color: #4b7322;
+        }
+
+
+
+        thead tr {
+            background-color: #f9a825;
+
+        }
+
+        .small-box {
+            width: 100%;
+            max-width: 550px;
+            height: auto;
+            background-color: #fdf6ec;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            margin-left: auto;
+        }
+
+        #sendcontact h3,
+        #sendcontact label,
+        p {
+            color: #4b7322;
+        }
+
+        #sendcontact input,
+        #sendcontact textarea {
+            width: 90%;
+            padding: 12px;
+            margin: 20px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+        }
+
+        #sendcontact textarea {
+            resize: vertical;
+        }
+
+        .quote-box {
+            position: relative;
+            border: 1px dashed #4b7322;
+
+            color: #4b7322;
+            font-family: Arial, sans-serif;
+            padding: 20px 40px;
+            font-style: italic;
+            max-width: 600px;
+            margin: 30px auto;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .quote-box::before,
+        .quote-box::after {
+            font-size: 40px;
+            color: #4b7322;
+            position: absolute;
+            font-weight: bold;
+        }
+
+        .quote-box::before {
+            content: "“";
+            top: 10px;
+            left: 10px;
+        }
+
+        .quote-box::after {
+            content: "”";
+            bottom: 10px;
+            right: 10px;
+        }
+
+        .info-list {
+
+            color: #4b7322;
+            list-style-type: none;
+        }
+
+        media (max-width: 1000px) {
+            .container {
+                flex-direction: column;
+                height: auto;
+                /* Đảm bảo container không bị giới hạn chiều cao */
+            }
+
+            .left,
+            .right {
+                overflow: visible;
+
+                /* Ngăn cuộn riêng */
+            }
+
+
+        }
+
+        #sendcontact button {
+            transition: transform 0.2s ease;
+        }
+
+        #sendcontact button:hover {
+            transform: scale(1.05);
+            background-color: #4b7322;
+        }
+
+
+
+        footer {
+            background-color: #fff;
+            color: #4b7322;
+            text-align: center;
+            padding: 10px 0;
+            font-size: 14px;
+            position: relative;
+            bottom: 0;
+            width: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="/">
+                <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
+            </a>
+            <h1>Bếp AI</h1>
+        </div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/home/forum">Cộng đồng</a>
+            <a href="/contact/contact">Contact</a>
+        </nav>
+        <div class="auth-buttons">
+            <button class="btn-login">ĐĂNG NHẬP</button>
+            <button class="btn-signup">ĐĂNG KÝ</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="left">
+            <div class="box">
+                <h3 class="titlecontact">THÔNG TIN NHÓM PHÁT TRIỂN</h3>
+
+                <ul class="info-list">
+                    <li><img src="~/images/2.png" alt="team" class="icon"> Nhóm 5</li>
+                    <li><img src="~/images/3.png" alt="subject" class="icon"> Môn Phát triển ứng dụng Web</li>
+                    <li><img src="~/images/4.png" alt="school" class="icon"> Đại học UEH</li>
+                </ul>
+
+                <table>
+                    <thead>
+                        <tr>
+                            <th>STT</th>
+                            <th>MSSV</th>
+                            <th>Họ và tên</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1</td>
+                            <td>33241022153</td>
+                            <td>Trần Quốc Thịnh</td>
+                        </tr>
+                        <tr>
+                            <td>2</td>
+                            <td>33241024002</td>
+                            <td>Nguyễn Chính Đạt</td>
+                        </tr>
+                        <tr>
+                            <td>3</td>
+                            <td>33241024113</td>
+                            <td>Trịnh Thảo Minh</td>
+                        </tr>
+                        <tr>
+                            <td>4</td>
+                            <td>33241024064</td>
+                            <td>Nguyễn Thanh Tùng</td>
+                        </tr>
+                        <tr>
+                            <td>5</td>
+                            <td>31221025992</td>
+                            <td>Nguyễn Như Tuệ Tâm</td>
+                        </tr>
+                        <tr>
+                            <td>6</td>
+                            <td>31221026611</td>
+                            <td>Lê Nguyễn Anh Thư</td>
+                        </tr>
+                        <tr>
+                            <td>7</td>
+                            <td>31221025872</td>
+                            <td>Lâm Yến Trúc</td>
+                        </tr>
+                        <tr>
+                            <td>8</td>
+                            <td>31211024017</td>
+                            <td>Nguyễn Hoàng Yến Thi</td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="right">
+            <div class="small-box">
+
+                <div class="quote-box">
+                    Chào bạn, nếu có bất kỳ thắc mắc, phản hồi hoặc gặp sự cố kỹ thuật, vui lòng liên hệ với nhóm chúng
+                    tôi. Chúng
+                    tôi luôn sẵn sàng hỗ trợ!
+                </div>
+                <form id="sendcontact" asp-action="Contact" asp-controller="Contact" method="post">
+                    <h3 class="titlecontact">LIÊN HỆ VỚI CHÚNG TÔI</h3>
+                    <label asp-for="Name">Họ và tên:</label>
+                    <input asp-for="Name" required />
+                    <span asp-validation-for="Name" class="validation-message"></span>
+
+                    <label asp-for="Email">Email:</label>
+                    <input asp-for="Email" required />
+                    <span asp-validation-for="Email" class="validation-message"></span>
+
+                    <label asp-for="Phone">Số điện thoại:</label>
+                    <input asp-for="Phone" required />
+                    <span asp-validation-for="Phone" class="validation-message"></span>
+
+                    <label asp-for="Message">Nội dung cần hỗ trợ:</label>
+                    <textarea asp-for="Message" rows="6" required></textarea>
+                    <span asp-validation-for="Message" class="validation-message"></span>
+
+                    <button type="submit">Gửi yêu cầu</button>
+                    @if (!ViewData.ModelState.IsValid)
+                    {
+                        <div style="color: red; text-align: center;">
+                            @Html.ValidationSummary()
+                        </div>
+                    }
+                </form>
+            </div>
+        </div>
+    </div>
+    <footer>
+        <p>© 2025 Nhóm 5 - Bếp AI. All rights reserved.</p>
+    </footer>
+</body>
+
+</html>

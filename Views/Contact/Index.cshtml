@@ -1,0 +1,212 @@
+@model IEnumerable<Contact>
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Quản Lý Liên Hệ - CookAIfood</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #fffdf9;
+            padding: 20px;
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: #fffefc;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .logo {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .logo img {
+            width: 150px;
+        }
+
+        h2 {
+            font-size: 28px;
+            color: #2d2d2d;
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .search-box {
+            margin-bottom: 20px;
+            text-align: right;
+        }
+
+        .search-box input {
+            padding: 10px;
+            width: 300px;
+            border: 1px solid #F2B950;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .search-box input:focus {
+            border-color: #4B7322;
+            outline: none;
+        }
+
+        .contact-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+
+        .contact-table th,
+        .contact-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #F2B950;
+        }
+
+        .contact-table th {
+            background-color: #F2C53D;
+            color: #2d2d2d;
+            font-weight: 600;
+        }
+
+        .contact-table tr:hover {
+            background-color: #f9f4e8;
+        }
+
+        .contact-table td {
+            color: #2d2d2d;
+            font-size: 14px;
+        }
+
+        .pagination {
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .pagination a {
+            display: inline-block;
+            padding: 8px 12px;
+            margin: 0 5px;
+            border: 1px solid #F2B950;
+            border-radius: 6px;
+            color: #4B7322;
+            text-decoration: none;
+            transition: background-color 0.3s ease;
+        }
+
+        .pagination a:hover {
+            background-color: #D9933D;
+            color: white;
+        }
+
+        .pagination .active {
+            background-color: #4B7322;
+            color: white;
+        }
+
+
+        media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .search-box input {
+                width: 100%;
+            }
+
+            .contact-table th,
+            .contact-table td {
+                padding: 8px;
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <div class="logo">
+            <a href="/">
+                <img src="~/images/logo_bepai_no_bg.png" alt="Bep AI Logo">
+            </a>
+        </div>
+        <h2>Danh Sách Liên Hệ</h2>
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Tìm kiếm theo tên hoặc email..." onkeyup="searchContacts()">
+        </div>
+        <table class="contact-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Họ Tên</th>
+                    <th>Email</th>
+                    <th>Số Điện Thoại</th>
+                    <th>Tin Nhắn</th>
+                </tr>
+            </thead>
+            <tbody id="contactTableBody">
+                @* Dữ liệu sẽ được render từ backend *@
+                @if (Model != null)
+                {
+                    foreach (var contact in Model)
+                    {
+                        <tr>
+                            <td>@contact.Id</td>
+                            <td>@contact.Name</td>
+                            <td>@contact.Email</td>
+                            <td>@contact.Phone</td>
+                            <td>@contact.Message</td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="5">Không có dữ liệu liên hệ.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+        <div class="pagination">
+            @* Ví dụ phân trang, cần backend hỗ trợ *@
+            <a href="?page=1" class="active">1</a>
+            <a href="?page=2">2</a>
+            <a href="?page=3">3</a>
+        </div>
+    </div>
+
+    <script>
+        function searchContacts() {
+            const input = document.getElementById('search').value.toLowerCase();
+            const rows = document.querySelectorAll('#contactTableBody tr');
+
+            rows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                const email = row.cells[2].textContent.toLowerCase();
+                if (name.includes(input) || email.includes(input)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+    </script>
+</body>
+
+</html>

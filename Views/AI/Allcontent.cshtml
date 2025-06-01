@@ -1,0 +1,391 @@
+@model IEnumerable<AIContent>
+@{
+    ViewData["Title"] = "AI Content Submission";
+}
+@{
+    Layout = null;
+}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1.0" name="viewport" />
+    <title>AI Recipe Generator</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #fff;
+            color: #000;
+        }
+
+        nav {
+            background-color: #4B7322;
+            padding: 0.8rem 2rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        nav .left,
+        nav .right {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        nav .left span {
+            color: white;
+            font-family: 'Pacifico', cursive;
+            font-size: 1.6rem;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .right a:first-child {
+            background-color: black;
+            color: #00FFAA;
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+        }
+
+        .right a:last-child {
+            border: 2px solid white;
+            padding: 0.4rem 1rem;
+            border-radius: 12px;
+        }
+
+        .main-container {
+            max-width: 1000px;
+            margin: 40px auto;
+            background: white;
+            padding: 20px;
+        }
+
+        .title-section {
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+
+        .filter {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .filter select {
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th {
+            text-align: left;
+            color: #8a8a8a;
+            background: #f5f5f5;
+        }
+
+        td,
+        th {
+            padding: 12px;
+            border-bottom: 1px solid #ccc;
+        }
+
+        tr:nth-child(even) {
+            background-color: #f9f9f9;
+        }
+
+        .status {
+            background-color: #4B7322;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 5px;
+            font-size: 13px;
+        }
+
+        .actions button {
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 18px;
+        }
+
+        .actions button.trash {
+            color: red;
+        }
+
+        .comment-box {
+            display: none;
+            position: fixed;
+            top: 20%;
+            left: 50%;
+            transform: translateX(-50%);
+            background: white;
+            border: 1px solid #ccc;
+            padding: 20px;
+            z-index: 1001;
+            width: 400px;
+        }
+
+        .comment-item {
+            border-bottom: 1px solid #eee;
+            padding: 10px 0;
+        }
+
+        .comment-item button {
+            background: red;
+            color: white;
+            border: none;
+            padding: 5px 10px;
+            margin-top: 5px;
+            cursor: pointer;
+            border-radius: 3px;
+        }
+
+        .confirm-dialog {
+            display: none;
+            position: fixed;
+            top: 30%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border: 1px solid #8a8a8a;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+            z-index: 9999;
+            width: 300px;
+            text-align: center;
+        }
+
+        .confirm-dialog button {
+            margin: 10px;
+            padding: 7px 15px;
+            border: none;
+            border-radius: 5px;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        .confirm-dialog .delete {
+            background-color: red;
+            color: white;
+        }
+
+        .confirm-dialog .cancel {
+            background-color: #8a8a8a;
+            color: white;
+        }
+
+        input[type="text"] {
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            width: 250px;
+        }
+
+        .top-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        td.content {
+            white-space: pre-wrap;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav>
+        <div class="left">
+            <a href="/">
+                <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
+            </a>
+            <span>Bếp AI</span>
+            <a href="#">Home</a>
+            <a href="#">Cộng đồng</a>
+            <a href="/contact/contact">Contact</a>
+            <a href="#">Quản lý bài viết</a>
+            <a href="#">Quản lý tài khoản</a>
+        </div>
+        <div class="right">
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <a href="/home"
+                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">Chào
+                    mừng: @User.Identity.Name</a>
+                <a href="/account/logout"
+                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
+                    XUẤT</a>
+            }
+            else
+            {
+                <a href="/account/login"
+                    style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
+                    NHẬP</a>
+            }
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <div class="main-container">
+        <div class="top-bar">
+            <div class="title-section">Quản lý bài viết</div>
+            <input type="text" placeholder="Tìm kiếm bài viết..." />
+        </div>
+
+        <div class="filter">
+            <label style="margin-right: 10px;">Điều kiện lọc:</label>
+            <select>
+                <option>Tất cả</option>
+                <option>Đã đăng</option>
+                <option>Chờ duyệt</option>
+                <option>Đã xóa</option>
+            </select>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>Tiêu đề</th>
+                    <th>Ngày đăng</th>
+                    <th>Trạng thái</th>
+                    <th>Hiển thị</th>
+                    <th>Tác vụ</th>
+                </tr>
+            </thead>
+            <tbody>
+                @* <tr>
+                    <td>243</td>
+                    <td><strong>Chân gà sốt thái</strong></td>
+                    <td>22/04/2025</td>
+                    <td><span class="status">Đã đăng</span></td>
+                    <td><input type="checkbox" checked></td>
+                    <td class="actions">
+
+                        <button onclick="showComments('Chân gà sốt thái')">💬</button>
+                        <button class="trash" onclick="confirmDelete()">🗑️</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>242</td>
+                    <td><strong>Gỏi ngó sen</strong></td>
+                    <td>19/04/2025</td>
+                    <td><span class="status">Đã đăng</span></td>
+                    <td><input type="checkbox" checked></td>
+                    <td class="actions">
+
+                        <button onclick="showComments('Gỏi ngó sen')">💬</button>
+                        <button class="trash" onclick="confirmDelete()">🗑️</button>
+                    </td>
+                </tr>
+                <tr>
+                    <td>241</td>
+                    <td><strong>Khô heo ớt tỏi</strong></td>
+                    <td>18/04/2025</td>
+                    <td><span class="status">Đã đăng</span></td>
+                    <td><input type="checkbox" checked></td>
+                    <td class="actions">
+
+                        <button onclick="showComments('Khô heo ớt tỏi')">💬</button>
+                        <button class="trash" onclick="confirmDelete()">🗑️</button>
+                    </td> *@
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.Id</td>
+                        @* <td><strong>@item.Title</strong></td>
+                    <td>@item.CreatedDate.ToString("dd/MM/yyyy")</td>
+                    <td><span class="status">@item.Status</span></td>
+                    <td><input type="checkbox" @(item.IsVisible ? "checked" : "")></td>
+                    <td class="actions">
+                        <button onclick="showComments('@item.Title')">💬</button>
+                        <button class="trash" onclick="confirmDelete()">🗑️</button> *@
+                        <td>1</td>
+                        <td class="content">@item.Content</td>
+                        <td><span class="status">Đã đăng</span></td>
+                        <td><input type="checkbox" checked></td>
+
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+    </div>
+
+    <div class="comment-box" id="commentBox">
+        <h4>Bình luận</h4>
+        <div id="commentList"></div>
+        <button onclick="document.getElementById('commentBox').style.display='none'">Đóng</button>
+    </div>
+
+    <div class="confirm-dialog" id="confirmDialog">
+        <p id="confirmText">Bạn chắc chắn muốn xóa không?</p>
+        <button class="delete" onclick="confirmDeleteAction()">Tiếp tục xóa</button>
+        <button class="cancel" onclick="closeDialog()">Cancel</button>
+    </div>
+
+    <script>
+        let currentDeleteAction = null;
+
+        function setActive(button) {
+            document.querySelectorAll('.sidebar button').forEach(btn => btn.classList.remove('active'));
+            button.classList.add('active');
+        }
+
+        function confirmDelete(action) {
+            currentDeleteAction = action || function () { alert("Đã xóa bài viết!"); };
+            document.getElementById("confirmDialog").style.display = "block";
+        }
+
+        function confirmDeleteAction() {
+            if (currentDeleteAction) currentDeleteAction();
+            closeDialog();
+        }
+
+        function closeDialog() {
+            document.getElementById("confirmDialog").style.display = "none";
+        }
+
+        function showComments(postTitle) {
+            const comments = [
+                "Bài viết rất hữu ích!",
+                "Mình đã thử và rất thích!",
+                "Cảm ơn đã chia sẻ công thức."
+            ];
+            const list = document.getElementById("commentList");
+            list.innerHTML = '';
+            comments.forEach((comment, index) => {
+                const div = document.createElement('div');
+                div.className = 'comment-item';
+                div.innerHTML = `<p>${comment}</p><button onclick="confirmDelete(() => this.parentElement.remove())">Xóa</button>`;
+                list.appendChild(div);
+            });
+            document.getElementById("commentBox").style.display = "block";
+        }
+    </script>
+
+</body>
+
+</html>

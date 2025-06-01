@@ -1,0 +1,156 @@
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model AIContent
+@{
+    Layout = null;
+}
+
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Chỉnh sửa bài viết - Bếp AI</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            background-color: #f4f4f4;
+            color: #333;
+        }
+
+        .main-container {
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #fff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            font-weight: bold;
+            margin-bottom: 5px;
+        }
+
+        input,
+        select,
+        textarea {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        textarea {
+            height: 100px;
+            resize: vertical;
+        }
+
+        .form-select {
+            width: 100%;
+        }
+
+        .validation-summary-errors {
+            color: red;
+            margin-bottom: 15px;
+        }
+
+        .image-preview img {
+            max-width: 70px;
+            margin-top: 10px;
+        }
+
+        button {
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        button.cancel {
+            background-color: #6c757d;
+            margin-left: 10px;
+        }
+
+        .text-danger {
+            color: red;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="main-container">
+        <h2>Chỉnh sửa bài viết</h2>
+        <div asp-validation-summary="All" class="validation-summary-errors"></div>
+        <form method="post" enctype="multipart/form-data">
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="UserID" />
+
+            <div class="form-group">
+                <label asp-for="CategoryContent">Danh mục</label>
+                <select class="form-select" asp-for="CategoryContent" id="categoryContent">
+
+                    @foreach (Category item in ViewBag.Categorycontent)
+                    {
+                        <option value="@item.CategoryName" selected="@(item.CategoryName == Model.CategoryContent)">
+                            @item.CategoryName</option>
+                    }
+                </select>
+                <span asp-validation-for="CategoryContent" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Title">Tiêu đề</label>
+                <input asp-for="Title" class="form-control" id="title" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <label asp-for="Content">Nội dung</label>
+                <textarea asp-for="Content" class="form-control" id="content"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="form-group">
+                <div>
+                    <label for="f">Hãy tải hình ảnh món ăn của bạn lên!</nav></label>
+                    <div>
+                        <input type="hidden" name="f" value="@Model.ImageUrl">
+                        <img src="~/image_ai/@Model.ImageUrl" alt="@Model.Title" width="70">
+                        <input type="file" name="imageFile" id="imageFile" accept="image/*">
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Lưu</button>
+                <button type="button" class="cancel">
+                    <a href="/ai/usercontent" style="color: white; text-decoration: none;">Hủy</a>
+                </button>
+
+            </div>
+        </form>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script asp-src-include="/lib/jquery-validation/dist/jquery.validate.min.js"></script>
+    <script asp-src-include="/lib/jquery-validation-unobtrusive/jquery.validate.unobtrusive.min.js"></script>
+</body>
+
+</html>

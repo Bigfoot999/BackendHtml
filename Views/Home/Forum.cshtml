@@ -1,0 +1,544 @@
+@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
+@using BackendHtml.Models
+@model IEnumerable<AIContent>
+
+@{
+    ViewData["Title"] = "Forum";
+}
+<!DOCTYPE html>
+<html lang="vi">
+@{
+    Layout = null;
+}
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bếp AI - Chia sẻ công thức nấu ăn</title>
+    <style>
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #fdf6ec;
+        }
+
+        header {
+            background-color: #4d7420;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 40px;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo img {
+            height: 40px;
+            margin-right: 10px;
+        }
+
+        nav {
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
+
+        nav a {
+            color: white;
+            text-decoration: none;
+            font-weight: bold;
+        }
+
+        .auth-buttons {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-login,
+        .btn-signup,
+        .btn-create {
+            padding: 8px 16px;
+            border-radius: 12px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+        }
+
+        .btn-login {
+            background-color: black;
+            color: #00ffc8;
+        }
+
+        .btn-signup {
+            background-color: transparent;
+            color: white;
+            border: 2px solid white;
+        }
+
+        .btn-create {
+            background-color: #f9a825;
+            color: white;
+        }
+
+        .container {
+            padding: 20px;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .search-section {
+            background: #fff8e7;
+            padding: 30px 20px;
+            border-radius: 10px;
+            text-align: center;
+            margin-bottom: 0px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .form-select {
+            margin: 20px 0;
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .search-bar {
+            display: flex;
+            max-width: 600px;
+            margin: 0;
+            border-radius: 6px;
+            overflow: hidden;
+            border: 1px solid #ccc;
+        }
+
+        .search-bar input {
+            flex: 1;
+            padding: 12px;
+            border: none;
+            font-size: 16px;
+        }
+
+        .search-bar button {
+            background-color: #f9a825;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .btn-create {
+            background-color: #f9a825;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+
+        .popular-searches {
+            padding: 40px 30px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .popular-searches h3 {
+            font-size: 24px;
+            margin-bottom: 20px;
+            color: #4B7322;
+        }
+
+        .popular-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+        }
+
+        .popular-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            cursor: pointer;
+            transition: transform 0.2s ease;
+        }
+
+        .popular-item:hover {
+            transform: translateY(-4px);
+        }
+
+        .popular-item img {
+            width: 100%;
+            height: 160px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .popular-item span {
+            position: absolute;
+            bottom: 10px;
+            left: 12px;
+            padding: 4px 8px;
+            background-color: rgba(0, 0, 0, 0.5);
+            color: #fff;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .recipe-list {
+            background: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .recipe-title {
+            color: #4B7322;
+            /* Màu xanh giống chữ Tìm kiếm phổ biến */
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        .recipe {
+            display: flex;
+            gap: 15px;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 0;
+            cursor: pointer;
+        }
+
+        .recipe img {
+            width: 100px;
+            height: 80px;
+            object-fit: cover;
+            border-radius: 6px;
+        }
+
+        .recipe:last-child {
+            border-bottom: none;
+        }
+
+        .recipe-info {
+            margin-top: 10px;
+        }
+
+        .author {
+            display: block;
+            font-size: 14px;
+            color: #4B7322;
+            /* Màu xanh giống như phần tiêu đề */
+        }
+
+        .rating {
+            margin-top: 5px;
+            font-size: 14px;
+        }
+
+        .stars {
+            color: #f9a825;
+            /* Màu vàng cho sao */
+        }
+
+        .review-count {
+            margin-left: 10px;
+            font-weight: normal;
+        }
+
+        .recipe-detail {
+            display: none;
+            background: #fff8e7;
+            margin-top: 10px;
+            padding: 20px;
+            border-radius: 12px;
+            color: #333;
+        }
+
+        .recipe-detail h4 {
+            color: #4B7322;
+            margin-bottom: 10px;
+        }
+
+        .recipe-detail ol {
+            padding-left: 20px;
+        }
+
+        #new-recipe-form {
+            margin-top: 30px;
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            /* Thu nhỏ kích thước ngang với phần xem công thức mọi người */
+            margin: 30px auto;
+            /* Căn giữa */
+            display: none;
+        }
+
+        #new-recipe-form.show {
+            display: block;
+        }
+
+        #new-recipe-form h3 {
+            color: #4B7322;
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+
+        #new-recipe-form label {
+            font-size: 16px;
+            color: #4B7322;
+            display: block;
+            margin-bottom: 8px;
+        }
+
+        #new-recipe-form input,
+        #new-recipe-form textarea {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            color: #333;
+        }
+
+        #new-recipe-form button {
+            background-color: #f9a825;
+            color: white;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <header>
+        <div class="logo">
+            <a href="/">
+                <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
+            </a>
+            <h1>Bếp AI</h1>
+        </div>
+        <nav>
+            <a href="/">Home</a>
+            <a href="/home/forum">Cộng đồng</a>
+            <a href="/contact/contact">Contact</a>
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <a href="/ai/usercontent">Quản lý bài viết</a>
+            }
+        </nav>
+        <div class="auth-buttons">
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <a href="/home"
+                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">Chào
+                    mừng: @User.Identity.Name</a>
+                <a href="/account/logout"
+                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
+                    XUẤT</a>
+            }
+            else
+            {
+                <a href="/account/login"
+                    style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
+                    NHẬP</a>
+            }
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="search-section">
+            <div class="search-bar">
+                <input type="text" placeholder="Tìm tên món hay nguyên liệu">
+                <button>Tìm Kiếm</button>
+            </div>
+            <button class="btn-create">Viết món mới</button>
+        </div>
+
+        <div class="popular-searches">
+            <h3>Tìm kiếm phổ biến</h3>
+
+
+            @* <select class="form-select" id="categoryContent" name="category">
+                <option value="">Chọn danh mục</option>
+                @foreach (Category item in ViewBag.Categorycontent)
+                {
+                    <option value="@item.CategoryName ">@item.CategoryName</option>
+                }
+            </select> *@
+
+            <form method="post" class="form-select">
+                <select class="form-select" id="categoryContent" name="category">
+                    <option value="@ViewBag.CategoryCurrent">@ViewBag.CategoryCurrent</option>
+                    @foreach (Category item in ViewBag.Categorycontent)
+                    {
+                        <option value="@item.CategoryName"
+                            selected="@(item.CategoryName == ViewBag.SelectedCategory ? "selected" : null)">
+                            @item.CategoryName
+                        </option>
+                    }
+                </select>
+                <button type="submit" class="btn-search">Tìm Kiếm Theo</button>
+            </form>
+
+
+            <div class="popular-grid">
+                <div class="popular-item">
+                    <img src="https://cdn.eva.vn/upload/2-2022/images/2022-06-30/1656555406-877-7-mon-rim-man-vua-ngon-lai-re-tien-vo-nau-them-nhieu-com-van-chang-du-an-3-1604894899-272-width640height480-1656555406-width640height480.jpg"
+                        alt="món mặn">
+                    <span>món mặn</span>
+                </div>
+                <div class="popular-item">
+                    <img src="https://kenh14cdn.com/203336854389633024/2024/9/19/untitled-1-09020008-1726747604687-17267476048672124928330.jpg"
+                        alt="khoai lang">
+                    <span>khoai lang</span>
+                </div>
+                <div class="popular-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwBov-W1j2KKvFTdyTcXwp1hoIvXHfzdSG2Q&s"
+                        alt="canh">
+                    <span>canh</span>
+                </div>
+                <div class="popular-item">
+                    <img src="https://www.huongnghiepaau.com/wp-content/uploads/2018/03/cach-nau-canh-chua-ca-dieu-hong.jpg"
+                        alt="canh chua">
+                    <span>canh chua</span>
+                </div>
+                <div class="popular-item">
+                    <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQwXqoB0nJc8jFBZsKqAm_IqJJn95t-IPTMSg&s"
+                        alt="ức gà áp chảo">
+                    <span>ức gà áp chảo</span>
+                </div>
+                <div class="popular-item">
+                    <img src="https://cdn2.fptshop.com.vn/unsafe/cach_lam_suon_xao_chua_ngot_mien_bac_1_ba342f8410.jpeg"
+                        alt="sườn xào chua ngọt">
+                    <span>sườn xào chua ngọt</span>
+                </div>
+                <div class="popular-item">
+                    <img src="https://file.hstatic.net/200000700229/article/lam-thit-chan-gio-nuong-bang-noi-chien-khong-dau_1958fe5361a648469096b4cd9cf86db4.jpg"
+                        alt="chân giò">
+                    <span>chân giò</span>
+                </div>
+                <div class="popular-item">
+                    <img src="https://thuanchay.vn/wp-content/uploads/2024/10/60-cong-thuc-nau-cac-mon-chay-14.webp"
+                        alt="món chay">
+                    <span>món chay</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="recipe-list">
+            <h2 class="recipe-title">Xem mọi người đang nấu món gì! Những món để thưởng thức trong mùa này</h2>
+            @* <div class="recipe" data-id="pho">
+                <img src="https://i0.wp.com/mycogroup.com.vn/wp-content/uploads/2023/05/pho-viet-nam-1.jpg"
+                    alt="Phở bò">
+                <div>
+                    <h3>Phở bò truyền thống</h3>
+                    <p>Nước dùng trong và đậm đà, thịt bò mềm, ăn kèm rau thơm.</p>
+                    <div class="recipe-info">
+                        <span class="author">Người đăng: <strong>Nguyễn Văn A</strong></span>
+                        <div class="rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="review-count">(5 đánh giá)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="recipe-detail" id="pho">
+                <h4>Phở bò truyền thống - Công thức</h4>
+                <ol>
+                    <li>Ninh xương bò với hành, gừng nướng trong 2-3 tiếng để làm nước dùng.</li>
+                    <li>Lọc nước dùng, thêm gia vị như muối, mắm, quế, hoa hồi.</li>
+                    <li>Chần bánh phở và thịt bò tái.</li>
+                    <li>Xếp bánh phở vào bát, thêm thịt, chan nước dùng và thêm hành, rau thơm.</li>
+                </ol>
+            </div>
+
+            <div class="recipe" data-id="banhxeo">
+                <img src="https://sakos.vn/wp-content/uploads/2024/09/bia-2.jpg" alt="Bánh xèo">
+                <div>
+                    <h3>Bánh xèo miền Tây</h3>
+                    <p>Vỏ bánh giòn, nhân tôm thịt kèm nước chấm chua ngọt.</p>
+                    <div class="recipe-info">
+                        <span class="author">Người đăng: <strong>Trần Thị B</strong></span>
+                        <div class="rating">
+                            <span class="stars">⭐⭐⭐⭐</span>
+                            <span class="review-count">(4 đánh giá)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="recipe-detail" id="banhxeo">
+                <h4>Bánh xèo miền Tây - Công thức</h4>
+                <ol>
+                    <li>Pha bột bánh với nước cốt dừa, bột nghệ và để nghỉ 30 phút.</li>
+                    <li>Chiên tôm, thịt với hành cho chín.</li>
+                    <li>Đổ bột bánh vào chảo, thêm nhân, đậy nắp chiên vàng giòn.</li>
+                    <li>Cuộn bánh với rau sống, chấm nước mắm chua ngọt.</li>
+                </ol>
+            </div>
+
+            <div class="recipe" data-id="comtam">
+                <img src="https://static.hawonkoo.vn/hwk02/images/2023/10/com-tam-suon-bi-cha-2.jpg" alt="Cơm tấm">
+                <div>
+                    <h3>Cơm tấm sườn bì chả</h3>
+                    <p>Món ăn quen thuộc của người Sài Gòn, ăn kèm nước mắm pha.</p>
+                    <div class="recipe-info">
+                        <span class="author">Người đăng: <strong>Phạm Minh C</strong></span>
+                        <div class="rating">
+                            <span class="stars">⭐⭐⭐⭐⭐</span>
+                            <span class="review-count">(5 đánh giá)</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="recipe-detail" id="comtam">
+                <h4>Cơm tấm sườn bì chả - Công thức</h4>
+                <ol>
+                    <li>Ướp sườn với ngũ vị hương, mật ong, tỏi trong 1 giờ rồi nướng.</li>
+                    <li>Hấp chả trứng từ thịt băm, miến, trứng và gia vị.</li>
+                    <li>Luộc bì heo, thái sợi trộn thính.</li>
+                    <li>Dọn cơm, thêm sườn, bì, chả, chan mỡ hành và nước mắm pha.</li>
+                </ol>
+            </div> *@
+            @foreach (AIContent item in Model)
+            {
+
+                <div class="recipe" data-id="banhxeo">
+                    <img src="~/image_ai/@item.ImageUrl" alt="@item.ImageUrl">
+                    <div>
+                        <a href="/ai/contentdetail/@item.Id">
+                            <h3>@item.Title</h3>
+                        </a>
+
+                        <div class="recipe-info">
+                            <span class="author">Người đăng: <strong>@item.Username</strong></span>
+                            <div class="rating">
+                                <span class="stars">⭐⭐⭐⭐</span>
+                                <span class="review-count">(4 đánh giá)</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+            }
+        </div>
+
+</body>
+
+</html>
