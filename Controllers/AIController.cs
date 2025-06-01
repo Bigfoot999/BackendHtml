@@ -1,23 +1,24 @@
 namespace BackendHtml.Controllers
 {
-    using Microsoft.AspNetCore.Mvc;
-    using BackendHtml.Models;
-    using System.Threading.Tasks;
-    using Microsoft.AspNetCore.Authorization;
     using System.Security.Claims;
-
+    using System.Text.Json;
+    using System.Threading.Tasks;
+    using BackendHtml.Models;
+    using Microsoft.AspNetCore.Authorization;
+    using Microsoft.AspNetCore.Mvc;
+    using RestSharp;
 
     [Authorize]  // Ensure that the user is authenticated to access this controller
     public class AIController : Controller
     {
         private AIRepository _aiRepository;
         private CategoryRepository _categoryRepository;
-
+        private readonly IConfiguration _configuration;
         public AIController(IConfiguration configuration)
         {
             _aiRepository = new AIRepository(configuration);
             _categoryRepository = new CategoryRepository(configuration);
-
+            _configuration = configuration;
         }
         public IActionResult Index()
         {
@@ -142,39 +143,139 @@ namespace BackendHtml.Controllers
             // var result = await _aiRepository.GetAIContentById(id);
             return View(await _aiRepository.GetAIContentById(id));
         }
+        //[HttpPost]
+        //public async Task<IActionResult> Edit(int id, AIContent obj, IFormFile? imageFile, String categoryContent)
+        //{
+        //    if (ModelState.IsValid)
+        //    {
+        //        if (imageFile != null)
+        //        {
+        //            // Kiểm tra người dùng có upload ảnh không
+        //            string ext = Path.GetExtension(imageFile.FileName); //Lấy tên đuôi file ảnh
+        //            obj.ImageUrl = Helper.RandomString(32 - ext.Length) + ext;
+        //            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwwroot", "image_ai", obj.ImageUrl);
+
+        //            using (Stream stream = new FileStream(path, FileMode.Create))
+        //            {
+        //                imageFile.CopyTo(stream);
+        //            }
+        //        }
+        //        else
+        //        {
+        //            // Nếu không có ảnh thì giữ nguyên ảnh cũ
+        //            var existingContent = await _aiRepository.GetAIContentById(id);
+        //            obj.ImageUrl = existingContent.ImageUrl;
+        //        }
+        //        obj.Id = id;
+        //        obj.CategoryContent = categoryContent;
+        //        int ret = await _aiRepository.Edit(obj);
+        //        string url = "/ai/usercontent/";
+        //        if (ret > 0)
+        //        {
+        //            return Redirect(url);
+        //        }
+        //    }
+        //    return Redirect("/product/error");
+        //}
         [HttpPost]
-        public async Task<IActionResult> Edit(int id, AIContent obj, IFormFile? imageFile, String categoryContent)
+        [Authorize]
+        public async Task<IActionResult> Edit(int id, AIContent aiContent, IFormFile? imageFile, string categoryContent)
         {
             if (ModelState.IsValid)
             {
+                string imageUrl = null;
                 if (imageFile != null)
                 {
-                    // Kiểm tra người dùng có upload ảnh không
-                    string ext = Path.GetExtension(imageFile.FileName); //Lấy tên đuôi file ảnh
-                    obj.ImageUrl = Helper.RandomString(32 - ext.Length) + ext;
-                    string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwwroot", "image_ai", obj.ImageUrl);
-
-                    using (Stream stream = new FileStream(path, FileMode.Create))
+                    // Upload ảnh lên ImgBB
+                    imageUrl = await UploadToImgBB(imageFile);
+                    if (string.IsNullOrEmpty(imageUrl))
                     {
-                        imageFile.CopyTo(stream);
+                        ModelState.AddModelError("", "Failed to upload image to ImgBB.");
+                        return View("Edit", aiContent);
                     }
+                    aiContent.ImageUrl = imageUrl;
                 }
                 else
                 {
-                    // Nếu không có ảnh thì giữ nguyên ảnh cũ
+                    // Giữ nguyên URL ảnh cũ nếu không có file mới
                     var existingContent = await _aiRepository.GetAIContentById(id);
-                    obj.ImageUrl = existingContent.ImageUrl;
+                    aiContent.ImageUrl = existingContent?.ImageUrl;
                 }
-                obj.Id = id;
-                obj.CategoryContent = categoryContent;
-                int ret = await _aiRepository.Edit(obj);
-                string url = "/ai/usercontent/";
+
+                aiContent.Id = id;
+                aiContent.CategoryContent = categoryContent;
+                int ret = await _aiRepository.Edit(aiContent);
                 if (ret > 0)
                 {
-                    return Redirect(url);
+                    return Redirect("/ai/usercontent/");
                 }
             }
             return Redirect("/product/error");
+        }
+
+        private async Task<string> UploadToImgBB(IFormFile imageFile)
+        {
+            try
+            {
+                // Read API key from appsettings.json
+                string apiKey = _configuration.GetSection("ImgBB:ApiKey").Value;
+                if (string.IsNullOrEmpty(apiKey))
+                {
+                    Console.WriteLine("ImgBB API key not found in appsettings.json.");
+                    return null;
+                }
+
+                // Validate file size (ImgBB limit: 32MB)
+                if (imageFile.Length > 32 * 1024 * 1024)
+                {
+                    Console.WriteLine("File size exceeds 32MB limit.");
+                    return null;
+                }
+
+                // Validate file format
+                string ext = Path.GetExtension(imageFile.FileName).ToLower();
+                if (!new[] { ".jpg", ".jpeg", ".png", ".gif", ".webp" }.Contains(ext))
+                {
+                    Console.WriteLine("Unsupported file format.");
+                    return null;
+                }
+
+                // Create RestClient instance
+                using var client = new RestClient("https://api.imgbb.com/1/upload");
+                var request = new RestRequest
+                {
+                    Method = Method.Post,
+                    AlwaysMultipartFormData = true
+                };
+
+                // Read image file into memory
+                using var memoryStream = new MemoryStream();
+                await imageFile.CopyToAsync(memoryStream);
+                memoryStream.Position = 0;
+
+                // Add image file and API key to request
+                request.AddFile("image", memoryStream.ToArray(), imageFile.FileName, imageFile.ContentType);
+                request.AddParameter("key", apiKey);
+
+                // Execute request
+                var response = await client.ExecuteAsync(request);
+                if (!response.IsSuccessful || response.Content == null)
+                {
+                    Console.WriteLine($"ImgBB upload failed: {response.StatusCode}");
+                    return null;
+                }
+
+                // Parse JSON response to get URL
+                using var jsonDoc = JsonDocument.Parse(response.Content);
+                var imageUrl = jsonDoc.RootElement.GetProperty("data").GetProperty("url").GetString();
+
+                return imageUrl;
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"Error uploading to ImgBB: {ex.Message}");
+                return null;
+            }
         }
 
     }

@@ -271,53 +271,6 @@
                 </tr>
             </thead>
             <tbody>
-                @* <tr>
-                    <td>243</td>
-                    <td><strong>Chân gà sốt thái</strong></td>
-                    <td>22/04/2025</td>
-                    <td><span class="status">Đã đăng</span></td>
-                    <td><input type="checkbox" checked></td>
-                    <td class="actions">
-
-                        <button onclick="showComments('Chân gà sốt thái')">💬</button>
-                        <button class="trash" onclick="confirmDelete()">🗑️</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>242</td>
-                    <td><strong>Gỏi ngó sen</strong></td>
-                    <td>19/04/2025</td>
-                    <td><span class="status">Đã đăng</span></td>
-                    <td><input type="checkbox" checked></td>
-                    <td class="actions">
-
-                        <button onclick="showComments('Gỏi ngó sen')">💬</button>
-                        <button class="trash" onclick="confirmDelete()">🗑️</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>241</td>
-                    <td><strong>Khô heo ớt tỏi</strong></td>
-                    <td>18/04/2025</td>
-                    <td><span class="status">Đã đăng</span></td>
-                    <td><input type="checkbox" checked></td>
-                    <td class="actions">
-
-                        <button onclick="showComments('Khô heo ớt tỏi')">💬</button>
-                        <button class="trash" onclick="confirmDelete()">🗑️</button>
-                    </td>
-                </tr>
-                <tr>
-                    <td>240</td>
-                    <td><strong>Xíu mại sốt cà chua</strong></td>
-                    <td>15/04/2025</td>
-                    <td><span class="status">Đã đăng</span></td>
-                    <td><input type="checkbox" checked></td>
-                    <td class="actions">
-                        <button onclick="showComments('Xíu mại sốt cà chua')">💬</button>
-                        <button class="trash" onclick="confirmDelete()">🗑️</button>
-                    </td>
-                </tr> *@
                 @foreach (var item in Model)
                 {
                     <tr>
@@ -328,7 +281,7 @@
                             </strong>
                         </td>
                         <td>
-                            <img src="~/image_ai/@item.ImageUrl" alt="@item.ImageUrl" width="80px">
+                            <img src="@item.ImageUrl" alt="@item.ImageUrl" width="80px">
                         </td>
                         <td class="actions">
                             <button onclick="showComments('@item.Title')">💬</button>
