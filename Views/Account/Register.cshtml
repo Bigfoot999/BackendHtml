@@ -8,6 +8,7 @@
 }
 <!DOCTYPE html>
 <html lang="vi">
+
 <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -37,12 +38,12 @@
             height: 100vh;
         }
 
-            .left img {
-                width: 100%;
-                height: 100%;
-                object-fit: cover;
-                border-radius: 8px;
-            }
+        .left img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            border-radius: 8px;
+        }
 
         .right {
             flex: 1;
@@ -62,9 +63,9 @@
             display: none;
         }
 
-            .form-box.active {
-                display: block;
-            }
+        .form-box.active {
+            display: block;
+        }
 
         h2 {
             font-size: 28px;
@@ -72,7 +73,9 @@
             color: #2d2d2d;
         }
 
-        input[type="email"], input[type="password"], input[type="text"] {
+        input[type="email"],
+        input[type="password"],
+        input[type="text"] {
             width: 100%;
             padding: 10px 12px;
             margin-bottom: 15px;
@@ -93,9 +96,9 @@
             transition: background-color 0.3s ease;
         }
 
-            button:hover {
-                background-color: #D9933D;
-            }
+        button:hover {
+            background-color: #D9933D;
+        }
 
         .divider {
             text-align: center;
@@ -124,16 +127,21 @@
             margin-bottom: 20px;
         }
 
-            .logo img {
-                width: 150px; /* Adjust size of the logo */
-            }
+        .logo img {
+            width: 150px;
+            /* Adjust size of the logo */
+        }
     </style>
 </head>
+
 <body>
     <div class="left">
-        <img src="https://phongvu.vn/cong-nghe/wp-content/uploads/2020/10/Meo-chup-anh-do-an-nhu-food-blogger.jpg" alt="food1">
-        <img src="https://images.squarespace-cdn.com/content/v1/53883795e4b016c956b8d243/1550052451758-LL5DACGHWUM1MEAI6HOA/chup-anh-mon-an-com-ga-thuong-hai-8.jpg" alt="food2">
-        <img src="https://jaybranding.com/wp-content/uploads/2023/05/chup-anh-thuc-an-food-photography-22.jpg" alt="food3">
+        <img src="https://phongvu.vn/cong-nghe/wp-content/uploads/2020/10/Meo-chup-anh-do-an-nhu-food-blogger.jpg"
+            alt="food1">
+        <img src="https://images.squarespace-cdn.com/content/v1/53883795e4b016c956b8d243/1550052451758-LL5DACGHWUM1MEAI6HOA/chup-anh-mon-an-com-ga-thuong-hai-8.jpg"
+            alt="food2">
+        <img src="https://jaybranding.com/wp-content/uploads/2023/05/chup-anh-thuc-an-food-photography-22.jpg"
+            alt="food3">
         <img src="https://spicyfoodstudio.com/wp-content/uploads/2023/03/chup-anh-do-an-01.jpg" alt="food4">
         <img src="https://static.vinwonders.com/production/vietnam-food-tourism-2.jpg" alt="food5">
         <img src="https://chuphinhmonan.com/wp-content/uploads/2017/03/avalon-1.jpg" alt="food6">
@@ -141,17 +149,17 @@
     <div class="right">
         <form method="post">
 
-        
-        <div class="form-box active" id="signup-form">
-            <h2>Tạo tài khoản</h2>
-            <input type="text" name="fullname" placeholder="Fullname" />
-            <input type="text" name="username" placeholder="Username" />
-            <input type="email" name="email" placeholder="Email" />
-            <input type="password" name="password" placeholder="Password" />
-            <button type="submit">Đăng ký</button>
-            <div class="privacy"> Bằng việc đăng ký, bạn đồng ý chính sách <a href="#">Privacy Policy</a> và <a href="#">Terms of Service</a>.</div>
+
+            <div class="form-box active" id="signup-form">
+                <h2>Tạo tài khoản</h2>
+                <input type="text" name="fullname" placeholder="Fullname" />
+                <input type="text" name="username" placeholder="Username" />
+                <input type="email" name="email" placeholder="Email" />
+                <input type="password" name="password" placeholder="Password" />
+                <button type="submit">Đăng ký</button>
+                <a class="privacy" href="/contact/contact">Mọi thắc mắc xin liên hệ Admin</a>
                 <a class="switch-link" href="/account/login">Đã có tài khoản? Đăng nhập</a>
-        </div>
+            </div>
         </form>
         <div class="form-box" id="reset-form">
             <h2>Đặt lại mật khẩu</h2>
@@ -163,9 +171,9 @@
 
     <script>
         function showForm(formId) {
-          const forms = document.querySelectorAll('.form-box');
-          forms.forEach(form => form.classList.remove('active'));
-          document.getElementById(formId).classList.add('active');
+            const forms = document.querySelectorAll('.form-box');
+            forms.forEach(form => form.classList.remove('active'));
+            document.getElementById(formId).classList.add('active');
         }
 
     </script>
@@ -173,4 +181,5 @@
 
 
 </body>
+
 </html>
