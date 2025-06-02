@@ -1,5 +1,5 @@
 ﻿using BackendHtml.Models;
-using LoginRegisterExample.Models;
+
 using Microsoft.EntityFrameworkCore;
 
 namespace BackendHtml.Context

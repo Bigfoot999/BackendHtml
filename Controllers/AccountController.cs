@@ -1,6 +1,6 @@
 using Microsoft.AspNetCore.Mvc;
 using BackendHtml.Context;
-using LoginRegisterExample.Models;
+
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication;
@@ -162,6 +162,7 @@ namespace BackendHtml.Controllers
                     PasswordHash = PasswordHasher.HashPassword(otpCode.ToString())
 
                 };
+                // cập nhật OTP là password tạm thời
                 await accountRepository.UpdateUser(newUser);
                 string bodyMail = "Dear " + Convert.ToString(user.Fullname) + ",\n\n" +
                 "Your OTP code is: " + otpCode.ToString() + "\n" +
@@ -221,28 +222,10 @@ namespace BackendHtml.Controllers
                 return Redirect("/Account/Denied");
             }
         }
-        // {
-        //     if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(otpCode) || string.IsNullOrEmpty(newPassword))
-        //     {
-        //         ViewBag.Message = "Vui lòng nhập đầy đủ thông tin";
-        //         return View();
-        //     }
-
-        //     User? user = _context.Users.FirstOrDefault(u => u.Email == email);
-
-        //     if (user != null && user.PasswordHash == PasswordHasher.HashPassword(otpCode))
-        //     {
-        //         user.PasswordHash = PasswordHasher.HashPassword(newPassword);
-        //         _context.SaveChanges();
-
-        //         ViewBag.Message = "Mật khẩu đã được thay đổi thành công!";
-        //         return Redirect("/Account/Login");
-        //     }
-        //     else
-        //     {
-        //         ViewBag.Message = "Mã OTP không hợp lệ hoặc email không đúng.";
-        //         return Redirect("/Account/Denied");
-        //     }
-        // }
+        public IActionResult Users()
+        {
+            var users = _context.Users.ToList();
+            return View(users);
+        }
     }
 }

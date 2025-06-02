@@ -1,4 +1,5 @@
-@model IEnumerable<Contact>
+@using BackendHtml.Models
+@model IEnumerable<User>
 @{
     Layout = null;
 }
@@ -14,6 +15,7 @@
             margin: 0;
             padding: 0;
             box-sizing: border-box;
+            using LoginRegisterExample.Models;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
@@ -204,32 +206,27 @@
                 <img src="~/images/logo_bepai_no_bg.png" alt="Bep AI Logo">
             </a>
         </div>
-        <h2>Danh Sách Liên Hệ</h2>
-        <div class="search-box">
-            <input type="text" id="search" placeholder="Tìm kiếm theo tên hoặc email..." onkeyup="searchContacts()">
-        </div>
+        <h2>Danh Sách Thành Viên</h2>
         <table class="contact-table">
             <thead>
                 <tr>
                     <th>ID</th>
                     <th>Họ Tên</th>
                     <th>Email</th>
-                    <th>Số Điện Thoại</th>
-                    <th>Tin Nhắn</th>
+
                 </tr>
             </thead>
             <tbody id="contactTableBody">
                 @* Dữ liệu sẽ được render từ backend *@
                 @if (Model != null)
                 {
-                    foreach (var contact in Model)
+                    foreach (var user in Model)
                     {
                         <tr>
-                            <td>@contact.Id</td>
-                            <td>@contact.Name</td>
-                            <td>@contact.Email</td>
-                            <td>@contact.Phone</td>
-                            <td>@contact.Message</td>
+                            <td>@user.Id</td>
+                            <td>@user.Fullname</td>
+                            <td>@user.Email</td>
+
                         </tr>
                     }
                 }

@@ -36,7 +36,7 @@
                 <ul class="dropdown-menu">
                     <li><a class="dropdown-item" href="/contact">Các Liên hệ</a></li>
                     <li><a class="dropdown-item" href="/category">Category</a></li>
-                    <li><a class="dropdown-item" href="/member">Member</a></li>
+                    <li><a class="dropdown-item" href="/account/users">Member</a></li>
                 </ul>
 
 
@@ -71,98 +71,6 @@
 
 
 
-@* <body>
-
-
-
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
-        Add
-    </button>
-
-    <!-- Modal -->
-    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form action="/category/add" method="post" class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="addModalLabel">Add Category</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <div class="row">
-                        <label class="col-2" for="name">Name</label>
-                        <div class="col-10">
-                            <input class="form-control" type="text" name="categoryName" id="name">
-                        </div>
-                    </div>
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary">Submit</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    @if (TempData["msg"] != null)
-    {
-        <div>@TempData["msg"]</div>
-    }
-
-
-    <table class="table table-border">
-        <thead class="table-dark">
-            <th>Id</th>
-            <th>Name</th>
-            <th>Command</th>
-
-        </thead>
-        <tbody>
-            @foreach (var item in Model)
-            {
-                <tr>
-                    <td>@item.Id</td>
-                    <td>@item.CategoryName</td>
-                    <td v="@item.Description">
-                        <i class="fa-solid fa-trash"></i>
-                        <a href="/category/delete/@item.Id">Delete</a>
-                        <a href="/category/edit/@item.Id">Edit</a>
-                    </td>
-                </tr>
-            }
-
-        </tbody>
-    </table>
-    <!-- Modal -->
-    <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="delModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <form name="frmDel" method="post" action="/category/delete" class="modal-content">
-                <div class="modal-header">
-                    <h1 class="modal-title fs-5" id="delModalLabel">Bạn có muốn xoá không?</h1>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <input type="hidden" name="id">
-                </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                    <button class="btn btn-primary">Xoá</button>
-                </div>
-            </form>
-        </div>
-    </div>
-    <div>
-        <button role="button" class="golden-button" onclick="location.href='/home'">
-            <span class="golden-text">Go to Homepage</span>
-        </button>
-        <script>
-            $('.fa-trash').click(function () {
-                console.log($(this).closest('td').attr('v'));
-                let id = $(this).closest('td').attr('v');
-                $(frmDel['id']).val(id);
-                $(delModal).modal('show');
-            })
-        </script>
-    </div>
-</body> *@
 <body>
     <div class="container">
 

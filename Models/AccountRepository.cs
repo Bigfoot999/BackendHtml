@@ -1,5 +1,5 @@
 using Dapper;
-using LoginRegisterExample.Models;
+using BackendHtml.Models;
 
 namespace BackendHtml.Models
 {
