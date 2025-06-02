@@ -132,7 +132,7 @@
                     <label for="f">Hãy tải hình ảnh món ăn của bạn lên!</nav></label>
                     <div>
                         <input type="hidden" name="f" value="@Model.ImageUrl">
-                        <img src="~/image_ai/@Model.ImageUrl" alt="@Model.Title" width="70">
+                        <img src="@Model.ImageUrl" alt="@Model.Title" width="70">
                         <input type="file" name="imageFile" id="imageFile" accept="image/*">
                     </div>
                 </div>
