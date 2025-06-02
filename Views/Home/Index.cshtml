@@ -20,6 +20,11 @@
 
     <link href="~/css/styleai.css" rel="stylesheet" />
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
 </head>
 
 <body>
@@ -37,7 +42,19 @@
             <a href="/home/forum" style="color: white; text-decoration: none; margin-left: 1.5rem;">Cộng đồng</a>
             @if (User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name == "admin")
             {
-                <a href="/contact" class="admin-button">Các liên hệ</a>
+
+                <a class="nav-link dropdown-toggle header__navbar-item header__navbar-item--has-qr header__navbar-item--separate"
+                    style="color: white; text-decoration: none; margin-left: 1.5rem;" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Quản lý
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/contact">Các Liên hệ</a></li>
+                    <li><a class="dropdown-item" href="/category">Category</a></li>
+                    <li><a class="dropdown-item" href="/member">Member</a></li>
+                </ul>
+
+
             }
             else
             {

@@ -1,4 +1,5 @@
-﻿using BackendHtml.Models;
+﻿using System.Threading.Tasks;
+using BackendHtml.Models;
 using Microsoft.AspNetCore.Mvc;
 
 namespace BackendHtml.Controllers
@@ -18,14 +19,30 @@ namespace BackendHtml.Controllers
         {
             return View();
         }
+
         [HttpPost]
-        public IActionResult Add(Category obj)
+        public async Task<IActionResult> Add(Category obj)
         {
             if (ModelState.IsValid)
             {
-                return Json(_categoryRepository.Add(obj));
+                await _categoryRepository.AddAsync(obj);
             }
-            return Json(-1);
+            return Redirect("/category");
+        }
+        public async Task<IActionResult> Delete(int id, string? categoryName)
+        {
+
+            return View(await _categoryRepository.GetCategoryById(id));
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            if (ModelState.IsValid)
+            {
+                await _categoryRepository.Delete(id);
+            }
+            return Redirect("/category");
         }
     }
 }

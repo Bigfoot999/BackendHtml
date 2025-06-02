@@ -1,121 +1,299 @@
-﻿@{
+﻿@model IEnumerable<Category>
+@{
     Layout = null;
 }
-@model IEnumerable<Category>
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Add Category
-</button>
 
-<!-- Modal -->
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog">
-        <form name="frm" method="post" action="/category/add" div class="modal-content">
-            <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">Category</h1>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <label class="col-2 form-label" for="name">Name</label>
-                    <div class="col-10">
-                        <input class="form-control" type="text" name="name" id="name"
-                            placeholder="Enter Category Name here!">
+<head>
+
+
+    <link rel="stylesheet" href="/fonts/themify-icons/themify-icons.css">
+    <link href="~/css/styleai.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="/css/bootstrap.min.css">
+    <link rel="stylesheet" href="/css/all.min.css">
+    <script src="/js/jquery-3.7.1.min.js"></script>
+
+    <script src="/js/bootstrap.bundle.min.js"></script>
+
+    <nav
+        style="background-color: #4B7322; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; font-family: Arial, sans-serif;">
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            <a href="/">
+                <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
+            </a>
+
+            <span style="color: white; font-family: 'Pacifico', cursive; font-size: 1.6rem;">Bếp AI</span>
+            <a href="/" style="color: white; text-decoration: none; margin-left: 1.5rem;">Home</a>
+            <a href="/home/forum" style="color: white; text-decoration: none; margin-left: 1.5rem;">Cộng đồng</a>
+            @if (User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name == "admin")
+            {
+
+                <a class="nav-link dropdown-toggle header__navbar-item header__navbar-item--has-qr header__navbar-item--separate"
+                    style="color: white; text-decoration: none; margin-left: 1.5rem;" href="#" role="button"
+                    data-bs-toggle="dropdown" aria-expanded="false">
+                    Quản lý
+                </a>
+                <ul class="dropdown-menu">
+                    <li><a class="dropdown-item" href="/contact">Các Liên hệ</a></li>
+                    <li><a class="dropdown-item" href="/category">Category</a></li>
+                    <li><a class="dropdown-item" href="/member">Member</a></li>
+                </ul>
+
+
+            }
+            else
+            {
+                <a href="/contact/contact" style="color: white; text-decoration: none; margin-left: 1.5rem;">Contact</a>
+            }
+
+        </div>
+        <div style="display: flex; align-items: center; gap: 1rem;">
+            @if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <a href="/home"
+                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">Chào
+                    mừng: @User.Identity.Name</a>
+                <a href="/account/logout"
+                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
+                    XUẤT</a>
+            }
+            else
+            {
+                <a href="/account/login"
+                    style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
+                    NHẬP</a>
+            }
+        </div>
+    </nav>
+
+</head>
+
+
+
+
+@* <body>
+
+
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#addModal">
+        Add
+    </button>
+
+    <!-- Modal -->
+    <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form action="/category/add" method="post" class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="addModalLabel">Add Category</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <div class="row">
+                        <label class="col-2" for="name">Name</label>
+                        <div class="col-10">
+                            <input class="form-control" type="text" name="categoryName" id="name">
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="modal-footer">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button class="btn btn-primary">Save changes</button>
-            </div>
-        </form>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary">Submit</button>
+                </div>
+            </form>
+        </div>
     </div>
-</div>
+    @if (TempData["msg"] != null)
+    {
+        <div>@TempData["msg"]</div>
+    }
 
 
-<table class="table table-bordered">
-    <thead class="table-dark">
-        <tr>
+    <table class="table table-border">
+        <thead class="table-dark">
             <th>Id</th>
             <th>Name</th>
             <th>Command</th>
-        </tr>
-    </thead>
-    <tbody id="rs">
-        @if (Model != null)
-        {
+
+        </thead>
+        <tbody>
             @foreach (var item in Model)
             {
-                <tr v="@item.Id">
+                <tr>
                     <td>@item.Id</td>
                     <td>@item.CategoryName</td>
-                    <td>
-                        <a href="/category/edit/@item.Id">Edit</a>
+                    <td v="@item.Description">
+                        <i class="fa-solid fa-trash"></i>
                         <a href="/category/delete/@item.Id">Delete</a>
+                        <a href="/category/edit/@item.Id">Edit</a>
                     </td>
                 </tr>
             }
-        }
 
-    </tbody>
-</table>
-
-@* -- Toast *@
-
-<div class="toast-container position-fixed bottom-0 end-0 p-3">
-    <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-        <div class="toast-header">
-            <img src="..." class="rounded me-2" alt="...">
-            <strong class="me-auto">Notification</strong>
-            <small>second ago</small>
-            <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
-        </div>
-        <div class="toast-body">
-            Success
+        </tbody>
+    </table>
+    <!-- Modal -->
+    <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="delModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <form name="frmDel" method="post" action="/category/delete" class="modal-content">
+                <div class="modal-header">
+                    <h1 class="modal-title fs-5" id="delModalLabel">Bạn có muốn xoá không?</h1>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <input type="hidden" name="id">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    <button class="btn btn-primary">Xoá</button>
+                </div>
+            </form>
         </div>
     </div>
-</div>
+    <div>
+        <button role="button" class="golden-button" onclick="location.href='/home'">
+            <span class="golden-text">Go to Homepage</span>
+        </button>
+        <script>
+            $('.fa-trash').click(function () {
+                console.log($(this).closest('td').attr('v'));
+                let id = $(this).closest('td').attr('v');
+                $(frmDel['id']).val(id);
+                $(delModal).modal('show');
+            })
+        </script>
+    </div>
+</body> *@
+<body>
+    <div class="container">
+
+        <h2>Danh Sách Danh Mục</h2>
+
+        <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
+            Add Category
+        </button>
+
+        @* Hiển thị thông báo *@
+        @if (TempData["msg"] != null)
+        {
+            <div class="alert alert-info mt-3">@TempData["msg"]</div>
+        }
+
+        @* Bảng danh mục *@
+        <table class="contact-table table table-bordered table-striped table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th scope="col">ID</th>
+                    <th scope="col">Tên Danh Mục Món Ăn </th>
+                    <th scope="col" class="text-center">Tuỳ Chỉnh</th>
+                </tr>
+            </thead>
+            <tbody id="categoryTableBody">
+                @if (Model != null && Model.Any())
+                {
+                    foreach (var item in Model)
+                    {
+                        <tr>
+                            <td>@item.Id</td>
+                            <td>@item.CategoryName</td>
+                            <td class="text-center" data-id="@item.Id" data-name="@item.CategoryName">
+                                <button type="button" title="Delete">
+                                    Xoá
+                                </button>
+
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="3">Không có dữ liệu danh mục.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
 
 
-<script>
-    $(frm).submit(function (ev) {
-        ev.preventDefault();
-        $.post('/category/add', { 'categoryName': $(frm['name']).val() }, (d) => {
-            console.log(d);
-            window.location.reload();
+
+        @* Modal thêm danh mục *@
+        <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="/category/add" method="post" class="modal-content">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="addModalLabel">Thêm Danh Mục Món Ăn</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <label class="col-2 col-form-label" for="name">Name</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" name="categoryName" id="name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @* Modal xóa danh mục *@
+        <div class="modal fade" id="delModal" tabindex="-1" aria-labelledby="delModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form name="frmDel" method="post" action="/category/delete" class="modal-content">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="delModalLabel">Bạn có muốn xóa danh mục này không?</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Xóa danh mục: <strong id="categoryName"></strong></p>
+                        <input type="hidden" name="id">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-danger">Xóa</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        @* Nút về trang chủ *@
+        <div class="mt-3">
+            <button role="button" class="btn btn-warning" onclick="location.href='/home'">
+                <span class="golden-text">Go to Homepage</span>
+            </button>
+        </div>
+    </div>
+
+    @* JavaScript *@
+    <script>
+        // Xử lý tìm kiếm danh mục
+        function searchCategories() {
+            const input = document.getElementById('search').value.toLowerCase();
+            const rows = document.querySelectorAll('#categoryTableBody tr');
+
+            rows.forEach(row => {
+                const name = row.cells[1].textContent.toLowerCase();
+                if (name.includes(input)) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        }
+
+        // Xử lý modal xóa
+        $('.fa-trash').click(function () {
+            let id = $(this).closest('td').data('id');
+            let name = $(this).closest('td').data('name');
+            console.log('ID to delete:', id, 'Name:', name);
+            $('form[name="frmDel"] input[name="id"]').val(id);
+            $('#delModal #categoryName').text(name);
+            $('#delModal').modal('show');
         });
-    });
-    let msg = ['Deleted Notify', 'Inserted Notify', 'Edit Notify'];
-    var cn = new signalR.HubConnectionBuilder().withUrl('/notify').build();
-    cn.start().then(() => {
-        console.log('Listening');
-    }).catch((e) => {
-        console.log(e);
-    });
-    cn.on('receiveTables', (type, d) => {
-        //console.log('Inserted');
-        //window.location.reload();
-        console.log(type);
-        console.log(d);
-        if (type == 2) {
-            $(rs).append(`
-                            <tr>
-                                <td>${d.categoryId}</td>
-                                <td>${d.categoryName}</td>
-                                <td>
-                                    <a href="/category/edit/${d.categoryId}">Edit</a>
-                                    <a href="/category/delete/${d.categoryName}">Delete</a>
-                                </td>
-                            </tr>
-              `);
-        }
-        else if (type == 1) {
-            $(`#rs tr[v="${d['categoryId']}"]`).remove();
-        }
-        else {
-            $($(`#rs tr[v="${d['categoryId']}"] td`)[1]).text(d['categoryName']);
-        }
-        $('#liveToast div.toast-body').text(msg[type - 1]);
-        new bootstrap.Toast(liveToast).show();
-    });
-</script>
+    </script>
+</body>

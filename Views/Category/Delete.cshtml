@@ -1,0 +1,14 @@
+@using BackendHtml.Models
+@{
+    Layout = null;
+}
+@model Category
+
+<form method="post">
+    <input type="hidden" name="id" value="@Model.Id">
+    <div>
+        <label for="">Name</label>
+        <input type="text" disabled value="@Model.CategoryName">
+    </div>
+    <button style="border-radius:10px; background-color: aqua; cursor:pointer;">Bạn có muốn xoá không?</button>
+</form>

@@ -1,13 +1,16 @@
 ﻿@model Category
-@addTagHelper *,Microsoft.AspNetCore.Mvc.TagHelpers
-@using BackendHtml.Models
-<div asp-validation-summary="All"></div>
-<form method="post" enctype="multipart/form-data>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form method="post">
     <input type="hidden" asp-for="Id">
     <div>
         <label asp-for="CategoryName">Name</label>
+        @* <label asp-for="CategoryName"></label> : tương đương với:
+        <label for="CategoryName">Name</label> *@
         <div>
             <input type="text" asp-for="CategoryName">
+            @* <input type="text" asp-for="CategoryName"> : tương đương với
+            <input type="text" name="CategoryName" value="@Model.CategoryName"> *@
             <span asp-validation-for="CategoryName"></span>
         </div>
     </div>

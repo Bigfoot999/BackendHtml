@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendHtml.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250601103054_InitialCreate")]
+    [Migration("20250602070051_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -68,7 +68,6 @@ namespace BackendHtml.Migrations
                         .HasColumnType("text");
 
                     b.Property<string>("Description")
-                        .IsRequired()
                         .HasColumnType("text");
 
                     b.HasKey("Id");
