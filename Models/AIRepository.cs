@@ -55,6 +55,8 @@ public class AIRepository : RepositoryBase
 
     public async Task<int> DeleteAIContent(int id)
     {
+        System.Console.WriteLine("------------------------------------------------");
+        System.Console.WriteLine($"Deleting AIContent with Id: {id}");
         var sql = "DELETE FROM \"AIContent\" WHERE \"Id\" = @Id";
         var parameters = new { Id = id };
         return await connection.ExecuteAsync(sql, parameters);
@@ -66,7 +68,7 @@ public class AIRepository : RepositoryBase
         {
             if (obj == null || obj.Id <= 0)
             {
-                return 0; // Hoặc ném ngoại lệ tùy yêu cầu
+                return 0;
             }
 
             const string sql = @"

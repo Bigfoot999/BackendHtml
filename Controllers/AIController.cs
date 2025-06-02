@@ -143,40 +143,7 @@ namespace BackendHtml.Controllers
             // var result = await _aiRepository.GetAIContentById(id);
             return View(await _aiRepository.GetAIContentById(id));
         }
-        //[HttpPost]
-        //public async Task<IActionResult> Edit(int id, AIContent obj, IFormFile? imageFile, String categoryContent)
-        //{
-        //    if (ModelState.IsValid)
-        //    {
-        //        if (imageFile != null)
-        //        {
-        //            // Kiểm tra người dùng có upload ảnh không
-        //            string ext = Path.GetExtension(imageFile.FileName); //Lấy tên đuôi file ảnh
-        //            obj.ImageUrl = Helper.RandomString(32 - ext.Length) + ext;
-        //            string path = Path.Combine(Directory.GetCurrentDirectory(), "wwwwroot", "image_ai", obj.ImageUrl);
 
-        //            using (Stream stream = new FileStream(path, FileMode.Create))
-        //            {
-        //                imageFile.CopyTo(stream);
-        //            }
-        //        }
-        //        else
-        //        {
-        //            // Nếu không có ảnh thì giữ nguyên ảnh cũ
-        //            var existingContent = await _aiRepository.GetAIContentById(id);
-        //            obj.ImageUrl = existingContent.ImageUrl;
-        //        }
-        //        obj.Id = id;
-        //        obj.CategoryContent = categoryContent;
-        //        int ret = await _aiRepository.Edit(obj);
-        //        string url = "/ai/usercontent/";
-        //        if (ret > 0)
-        //        {
-        //            return Redirect(url);
-        //        }
-        //    }
-        //    return Redirect("/product/error");
-        //}
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> Edit(int id, AIContent aiContent, IFormFile? imageFile, string categoryContent)
@@ -276,6 +243,12 @@ namespace BackendHtml.Controllers
                 Console.WriteLine($"Error uploading to ImgBB: {ex.Message}");
                 return null;
             }
+        }
+        [HttpPost]
+        public async Task<IActionResult> Delete(int id)
+        {
+            await _aiRepository.DeleteAIContent(id);
+            return Redirect("/ai/usercontent");
         }
 
     }

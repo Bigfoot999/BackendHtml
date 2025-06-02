@@ -36,44 +36,46 @@ namespace BackendHtml.Controllers
                 return View();
             }
 
-            // Kiểm tra tên đăng nhập và mật khẩu
+        
             User? user = _context.Users.FirstOrDefault(u => u.Email == email);
 
-            if (user != null && PasswordHasher.VerifyPassword(password, user.PasswordHash))
+            if (user != null )
             {
-                // Tạo claims
-                //List<Claim> claims = new List<Claim>{
-                //    new Claim(ClaimTypes.Name, user.Fullname),
-                //    new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
-                //};
-                List<Claim> claims = new List<Claim>{
+                if (PasswordHasher.VerifyPassword(password, user.PasswordHash)){
+                    List<Claim> claims = new List<Claim>{
                      new Claim(ClaimTypes.Name, user.Fullname),
                      new Claim(ClaimTypes.Email, user.Email),
                      new Claim(ClaimTypes.NameIdentifier, user.Id.ToString())
                  };
 
-                ;
+                    ;
 
-                // Tạo identity và principal
-                ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
-                ClaimsPrincipal principal = new ClaimsPrincipal(identity);
+                    // Tạo identity và principal
+                    ClaimsIdentity identity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                    ClaimsPrincipal principal = new ClaimsPrincipal(identity);
 
-                // Đăng nhập và lưu cookie
-                await HttpContext.SignInAsync(principal, new AuthenticationProperties
+                    // Đăng nhập và lưu cookie
+                    await HttpContext.SignInAsync(principal, new AuthenticationProperties
+                    {
+                        IsPersistent = true
+                    });
+
+
+                    TempData["Message"] = "Đăng nhập thành công!";
+
+                    return Redirect("/home");
+                }
+                else
                 {
-                    IsPersistent = true
-                });
-
-
-                TempData["Message"] = "Đăng nhập thành công!";
-
-                return Redirect("/home");
+                    ViewBag.Message = "Đăng nhập thất bại. Sai tên hoặc mật khẩu.";
+                    return Redirect("/Account/denied");
+                }
             }
             else
             {
 
                 ViewBag.Message = "Đăng nhập thất bại. Sai tên hoặc mật khẩu.";
-                return Redirect("/Account/Login");
+                return Redirect("/Account/denied");
             }
         }
         public async Task<IActionResult> Logout()

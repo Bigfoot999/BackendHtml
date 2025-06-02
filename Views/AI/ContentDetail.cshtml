@@ -306,7 +306,7 @@
             <a href="/">Home</a>
             <a href="/forum">Cộng đồng</a>
             <a href="/contact/contact">Contact</a>
-            <a href="#">Quản lý bài viết</a>
+            <a href="/ai/usercontent">Quản lý bài viết</a>
             <a href="#">Quản lý tài khoản</a>
         </div>
         <div class="right">
@@ -357,9 +357,13 @@
                     <h3>@Model.Title</h3>
                     <p>@Model.Content</p>
                     <div class="recipe-actions">
-                        <button onclick="showComments('@Model.Title')"><i class="fas fa-comment"></i> Bình luận</button>
-                        <button class="trash" onclick="confirmDelete(() => alert('Đã xóa món: @Model.Title'))"><i
-                                class="fas fa-trash"></i> Xóa</button>
+                        <a href="/ai/edit/@Model.Id"><i class="fas fa-comment"></i> Chỉnh sửa</a>
+                        <button class="trash" onclick="confirmDelete('@Model.Id')"><i class="fas fa-trash"></i>
+                            Xóa</button>
+                        @* Form ẩn *@
+                        <form id="deleteForm-@Model.Id" action="/ai/Delete" method="post" style="display: none;">
+                            <input type="hidden" name="id" value="@Model.Id" />
+                        </form>
                     </div>
                 </div>
             </div>
@@ -367,50 +371,31 @@
         </div>
     </div>
 
-    <div class="comment-box" id="commentBox">
-        <h4>Bình luận</h4>
-        <div id="commentList"></div>
-        <button onclick="document.getElementById('commentBox').style.display='none'">Đóng</button>
-    </div>
+
 
     <div class="confirm-dialog" id="confirmDialog">
         <p id="confirmText">Bạn chắc chắn muốn xóa món ăn này không?</p>
         <button class="delete" onclick="confirmDeleteAction()">Tiếp tục xóa</button>
         <button class="cancel" onclick="closeDialog()">Hủy</button>
     </div>
-
     <script>
-        let currentDeleteAction = null;
+        let currentFormId = null;
 
-        function confirmDelete(action) {
-            currentDeleteAction = action || function () { alert("Đã xóa món ăn!"); };
+        function confirmDelete(id) {
+            currentFormId = `deleteForm-${id}`;
             document.getElementById("confirmDialog").style.display = "block";
         }
 
         function confirmDeleteAction() {
-            if (currentDeleteAction) currentDeleteAction();
+            if (currentFormId) {
+                document.getElementById(currentFormId).submit();
+            }
             closeDialog();
         }
 
         function closeDialog() {
             document.getElementById("confirmDialog").style.display = "none";
-        }
-
-        function showComments(postTitle) {
-            const comments = [
-                "Món ăn này thật tuyệt vời!",
-                "Tôi đã thử và rất thích, cảm ơn công thức!",
-                "Hãy chia sẻ thêm nhiều món nữa nhé!"
-            ];
-            const list = document.getElementById("commentList");
-            list.innerHTML = '';
-            comments.forEach((comment, index) => {
-                const div = document.createElement('div');
-                div.className = 'comment-item';
-                div.innerHTML = `<p>${comment}</p><button onclick="confirmDelete(() => this.parentElement.remove())">Xóa</button>`;
-                list.appendChild(div);
-            });
-            document.getElementById("commentBox").style.display = "block";
+            currentFormId = null;
         }
     </script>
 </body>
