@@ -325,39 +325,7 @@
 </head>
 
 <body>
-    <header>
-        <div class="logo">
-            <a href="/">
-                <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
-            </a>
-        </div>
-        <nav>
-            <a href="/">Trang chủ</a>
-            <a href="/home/forum">Cộng đồng</a>
-            <a href="/contact/contact">Liên hệ</a>
-            @if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                <a href="/ai/usercontent">Quản lý bài viết</a>
-            }
-        </nav>
-        <div class="auth-buttons">
-            @if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                <a href="/home"
-                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">Chào
-                    mừng: @User.Identity.Name</a>
-                <a href="/account/logout"
-                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
-                    XUẤT</a>
-            }
-            else
-            {
-                <a href="/account/login"
-                    style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
-                    NHẬP</a>
-            }
-        </div>
-    </header>
+    @await Html.PartialAsync("header");
 
     <div class="container">
         <div class="search-section">

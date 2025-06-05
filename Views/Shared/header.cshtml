@@ -1,0 +1,75 @@
+<style>
+    nav.navbar {
+        background-color: #4B7322;
+        padding: 0.8rem 2rem;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        font-family: Arial, sans-serif;
+    }
+
+    .navbar-left,
+    .navbar-right {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+    }
+
+    .navbar-left a {
+        color: white;
+        text-decoration: none;
+        margin-left: 1.5rem;
+    }
+
+    .navbar-logo {
+        width: 60px;
+        height: 60px;
+    }
+
+    .btn-authenticated {
+        border: 2px solid white;
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 12px;
+        text-decoration: none;
+    }
+
+    .btn-login {
+        border: 2px solid white;
+        color: white;
+        padding: 0.4rem 1rem;
+        border-radius: 12px;
+        text-decoration: none;
+    }
+
+    header h2 {
+        margin: 1rem;
+        text-align: center;
+    }
+</style>
+
+<nav class="navbar">
+    <div class="navbar-left">
+        <a href="/">
+            <img src="~/images/logo_bepai_no_bg.png" alt="logo" class="navbar-logo" />
+        </a>
+        <a href="/Home/Index">Trang chủ</a>
+        <a href="Home/Forum">Cộng đồng</a>
+        <a href="/contact/contact">Liên hệ</a>
+    </div>
+    <div class="navbar-right">
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <a href="/home" class="btn-authenticated">Chào mừng: @User.Identity.Name</a>
+            <a href="/account/logout" class="btn-authenticated">ĐĂNG XUẤT</a>
+        }
+        else
+        {
+            <a href="/account/login" class="btn-login">ĐĂNG NHẬP</a>
+        }
+    </div>
+</nav>
+
+<header>
+    <h2>🍳 Let's Foodie</h2>
+</header>

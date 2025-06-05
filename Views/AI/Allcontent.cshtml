@@ -216,36 +216,7 @@
 <body>
 
     <!-- Navbar -->
-    <nav>
-        <div class="left">
-            <a href="/">
-                <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
-            </a>
-            <a href="/">Trang chủ</a>
-            <a href="/forum">Cộng đồng</a>
-            <a href="/contact/contact">Liên hệ</a>
-            <a href="#">Quản lý bài viết</a>
-            <a href="#">Quản lý tài khoản</a>
-        </div>
-        <div class="right">
-            @if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                <a href="/home"
-                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">Chào
-                    mừng: @User.Identity.Name</a>
-                <a href="/account/logout"
-                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
-                    XUẤT</a>
-            }
-            else
-            {
-                <a href="/account/login"
-                    style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
-                    NHẬP</a>
-            }
-        </div>
-    </nav>
-
+    @await Html.PartialAsync("header");
     <!-- Main Content -->
     <div class="main-container">
         <div class="top-bar">
