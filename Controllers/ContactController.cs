@@ -30,7 +30,6 @@ namespace BackendHtml.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> Contact(Contact contact)
         {
             System.Console.WriteLine("Contact form submitted with data: " + contact.Name + ", " + contact.Email + ", " + contact.Phone + ", " + contact.Message);
