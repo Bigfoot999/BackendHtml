@@ -145,13 +145,12 @@
 
     <script src="/js/bootstrap.bundle.min.js"></script>
 
-    <nav
+<nav
         style="background-color: #4B7322; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; font-family: Arial, sans-serif;">
         <div style="display: flex; align-items: center; gap: 1rem;">
             <a href="/">
                 <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
             </a>
-
             <a href="/" style="color: white; text-decoration: none; margin-left: 1.5rem;">Trang chủ</a>
             <a href="/home/forum" style="color: white; text-decoration: none; margin-left: 1.5rem;">Cộng đồng</a>
             @if (User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name == "admin")
@@ -172,7 +171,7 @@
             }
             else
             {
-                <a href="/contact/contact" style="color: white; text-decoration: none; margin-left: 1.5rem;">Liên hệ</a>
+                <a href="/contact/contact" style="color: white; text-decoration: none; margin-left: 1.5rem;">Contact</a>
             }
 
         </div>
@@ -194,6 +193,7 @@
             }
         </div>
     </nav>
+
 </head>
 
 <body>

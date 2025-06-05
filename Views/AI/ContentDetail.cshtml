@@ -356,9 +356,8 @@
                     <h3>@Model.Title</h3>
                     <p>@Model.Content</p>
                     <div class="recipe-actions">
-                        <a href="/ai/edit/@Model.Id"><i class="fas fa-comment"></i> Chỉnh sửa</a>
-                        <button class="trash" onclick="confirmDelete('@Model.Id')"><i class="fas fa-trash"></i>
-                            Xóa</button>
+                        @* <a href="/ai/edit/@Model.Id"><i class="fas fa-comment"></i> Chỉnh sửa</a> *@
+                        @* <button class="trash" onclick="confirmDelete('@Model.Id')"><i class="fas fa-trash"></i> Xóa</button>*@
                         @* Form ẩn *@
                         <form id="deleteForm-@Model.Id" action="/ai/Delete" method="post" style="display: none;">
                             <input type="hidden" name="id" value="@Model.Id" />

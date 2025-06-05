@@ -158,11 +158,6 @@ public class HomeController : Controller
     {
         var result = await _aiRepository.GetAllAIContents();
         ViewBag.CategoryContent = _categoryRepository.GetCategories();
-        if (result == null)
-        {
-            System.Console.WriteLine("-------------------------------------------------");
-            System.Console.WriteLine("result null");
-        }
         return View(result);
     }
     [HttpPost]

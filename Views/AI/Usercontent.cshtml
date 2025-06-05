@@ -283,8 +283,12 @@
                             <img src="@item.ImageUrl" alt="@item.ImageUrl" width="80px">
                         </td>
                         <td class="actions">
-                            <button onclick="showComments('@item.Title')">💬</button>
-                            <button class="trash" onclick="confirmDelete(() => alert('Đã xóa bài viết!'))">🗑️</button>
+                            @* <button onclick="showComments('@item.Title')">💬</button> *@
+                            <button class="trash" onclick="confirmDelete('@item.Id')">🗑️</button>
+                            @* Form ẩn *@
+                            <form id="deleteForm-@item.Id" action="/ai/Delete" method="post" style="display: none;">
+                                <input type="hidden" name="id" value="@item.Id" />
+                            </form>
                             <a href="/ai/edit/@item.Id">Edit</a>
                         </td>
                     </tr>
@@ -303,6 +307,7 @@
         <p id="confirmText">Bạn chắc chắn muốn xóa không?</p>
         <button class="delete" onclick="confirmDeleteAction()">Tiếp tục xóa</button>
         <button class="cancel" onclick="closeDialog()">Cancel</button>
+
     </div>
 
     <script>
@@ -313,19 +318,25 @@
             button.classList.add('active');
         }
 
-        function confirmDelete(action) {
-            currentDeleteAction = action || function () { alert("Đã xóa bài viết!"); };
+        let currentFormId = null;
+
+        function confirmDelete(id) {
+            currentFormId = `deleteForm-${id}`;
             document.getElementById("confirmDialog").style.display = "block";
         }
 
         function confirmDeleteAction() {
-            if (currentDeleteAction) currentDeleteAction();
+            if (currentFormId) {
+                document.getElementById(currentFormId).submit();
+            }
             closeDialog();
         }
 
         function closeDialog() {
             document.getElementById("confirmDialog").style.display = "none";
+            currentFormId = null;
         }
+
 
         function showComments(postTitle) {
             const comments = [
