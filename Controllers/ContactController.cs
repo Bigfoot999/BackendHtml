@@ -13,11 +13,23 @@ namespace BackendHtml.Controllers
         {
             contactRepository = new ContactRepository(configuration);
         }
-
+        [Authorize]
         public async Task<IActionResult> Index()
         {
-            List<Contact> contacts = await contactRepository.GetContacts();
-            return View(contacts);
+            if (User.Identity == null || !User.Identity.IsAuthenticated || User.Identity.Name != "admin")
+            {
+                return Redirect("/account/denied");
+            }
+            else if (User.Identity.Name == "admin")
+            {
+                List<Contact> contacts = await contactRepository.GetContacts();
+                return View(contacts);
+            }
+            else
+            {
+                return Redirect("/account/login");
+            }
+
         }
 
         public IActionResult Contact()
