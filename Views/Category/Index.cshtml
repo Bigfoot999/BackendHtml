@@ -106,6 +106,47 @@
         <button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#addModal">
             Add Category
         </button>
+        
+        @* Modal thêm danh mục *@
+        <div class="modal fade" id="addModal" tabindex="-1" aria-labelledby="addModalLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <form action="/category/add" method="post" class="modal-content">
+                    @Html.AntiForgeryToken()
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="addModalLabel">Thêm Danh Mục Món Ăn</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row">
+                            <label class="col-2 col-form-label" for="name">Name</label>
+                            <div class="col-10">
+                                <input class="form-control" type="text" name="categoryName" id="name">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">More actions
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        @* -- Toast *@
+        <div class="toast-container position-fixed bottom-0 end-0 p-3">
+            <div id="liveToast" class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+                <div class="toast-header">
+                    <img src="..." class="rounded me-2" alt="...">
+                    <strong class="me-auto">Notification</strong>
+                    <small>second ago</small>
+                    <button type="button" class="btn-close" data-bs-dismiss="toast" aria-label="Close"></button>
+                </div>
+                <div class="toast-body">
+                    Success
+                </div>
+            </div>
+        </div>
+
+
 
         @* Hiển thị thông báo *@
         @if (TempData["msg"] != null)
@@ -168,6 +209,46 @@
    
 
     <script>
+            $(frm).submit(function (ev) {
+            ev.preventDefault();
+            $.post('/category/add', { 'categoryName': $(frm['name']).val() }, (d) => {
+                console.log(d);
+                window.location.reload();
+            });
+        });
+        let msg = ['Deleted Notify', 'Inserted Notify', 'Edit Notify'];
+        var cn = new signalR.HubConnectionBuilder().withUrl('/notify').build();
+        cn.start().then(() => {
+            console.log('Listening');
+        }).catch((e) => {
+            console.log(e);
+        });
+        cn.on('receiveTables', (type, d) => {
+            //console.log('Inserted');
+            //window.location.reload();
+            console.log(type);
+            console.log(d);
+            if (type == 2) {
+                $(rs).append(`
+                                <tr>
+                                    <td>${d.categoryId}</td>
+                                    <td>${d.categoryName}</td>
+                                    <td>
+                                        <a href="/category/edit/${d.categoryId}">Edit</a>
+                                        <a href="/category/delete/${d.categoryName}">Delete</a>
+                                    </td>
+                                </tr>
+                `);
+            }
+            else if (type == 1) {
+                $(`#rs tr[v="${d['categoryId']}"]`).remove();
+            }
+            else {
+                $($(`#rs tr[v="${d['categoryId']}"] td`)[1]).text(d['categoryName']);
+            }
+            $('#liveToast div.toast-body').text(msg[type - 1]);
+            new bootstrap.Toast(liveToast).show();
+        });
         let currentDeleteAction = null;
 
         let currentFormId = null;
