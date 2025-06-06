@@ -334,11 +334,11 @@
         <nav>
             <a href="/">Trang chủ</a>
             <a href="/home/forum">Cộng đồng</a>
-            <a href="/contact/contact">Liên hệ</a>
             @if (User.Identity != null && User.Identity.IsAuthenticated)
             {
                 <a href="/ai/usercontent">Quản lý bài viết</a>
             }
+            <a href="/contact/contact">Liên hệ</a>
         </nav>
         <div class="auth-buttons">
             @if (User.Identity != null && User.Identity.IsAuthenticated)
@@ -360,13 +360,13 @@
     </header>
 
     <div class="container">
-        <div class="search-section">
+        @* <div class="search-section">
             <div class="search-bar">
                 <input type="text" placeholder="Tìm tên món hay nguyên liệu">
                 <button>Tìm Kiếm</button>
             </div>
             <button class="btn-create">Viết món mới</button>
-        </div>
+        </div> *@
 
         <div class="popular-searches">
             <h3>Tìm kiếm phổ biến</h3>
