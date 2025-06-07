@@ -209,7 +209,7 @@
    
 
     <script>
-            $(frm).submit(function (ev) {
+        @* $(frm).submit(function (ev) {
             ev.preventDefault();
             $.post('/category/add', { 'categoryName': $(frm['name']).val() }, (d) => {
                 console.log(d);
@@ -224,8 +224,6 @@
             console.log(e);
         });
         cn.on('receiveTables', (type, d) => {
-            //console.log('Inserted');
-            //window.location.reload();
             console.log(type);
             console.log(d);
             if (type == 2) {
@@ -248,7 +246,7 @@
             }
             $('#liveToast div.toast-body').text(msg[type - 1]);
             new bootstrap.Toast(liveToast).show();
-        });
+        }); *@
         let currentDeleteAction = null;
 
         let currentFormId = null;
