@@ -24,37 +24,6 @@
             color: #333;
         }
 
-        nav {
-            background-color: #4B7322;
-            padding: 0.8rem 2rem;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        nav .left,
-        nav .right {
-            display: flex;
-            align-items: center;
-            gap: 1.5rem;
-        }
-
-        nav .left span {
-            color: white;
-            font-family: 'Pacifico', cursive;
-            font-size: 1.6rem;
-        }
-
-        nav a {
-            color: white;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-
-        nav a:hover {
-            color: #00FFAA;
-        }
 
         .right a:first-child {
             background-color: black;
@@ -297,36 +266,34 @@
 
 <body>
     <!-- Navbar -->
-    <nav>
-        <div class="left">
-            <a href="/">
-                <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px;" />
+ <nav style="background-color: #4B7322; padding: 0.8rem 2rem; display: flex; justify-content: space-between; align-items: center; font-family: 'Arimo', Arial, sans-serif; box-sizing: border-box;">
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        <a href="/" style="display: inline-block;">
+            <img src="~/images/logo_bepai_no_bg.png" alt="logo" style="width: 60px; height: 60px; display: block;" />
+        </a>
+        <a href="/Home/Index" style="color: white; text-decoration: none; margin-left: 1.5rem; font-size: 1rem; font-weight: 500;">Trang chủ</a>
+        <a href="/Home/Forum" style="color: white; text-decoration: none; margin-left: 1.5rem; font-size: 1rem; font-weight: 500;">Cộng đồng</a>
+        <a href="/contact/contact" style="color: white; text-decoration: none; margin-left: 1.5rem; font-size: 1rem; font-weight: 500;">Liên hệ</a>
+        <a href="/ai/usercontent" style="color: white; text-decoration: none; margin-left: 1.5rem; font-size: 1rem; font-weight: 500;">Quản lý bài viết</a>
+    </div>
+    <div style="display: flex; align-items: center; gap: 1rem;">
+        @if (User.Identity != null && User.Identity.IsAuthenticated)
+        {
+            <a href="/home" style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none; font-size: 0.95rem; font-weight: 600;">
+                Chào mừng: @User.Identity.Name
             </a>
-            <a href="/">Trang chủ</a>
-            <a href="/forum">Cộng đồng</a>
-            <a href="/ai/usercontent">Quản lý bài viết</a>
-            <a href="/contact/contact">Liên hệ</a>
-            @* <a href="#">Quản lý tài khoản</a> *@
-        </div>
-        <div class="right">
-            @if (User.Identity != null && User.Identity.IsAuthenticated)
-            {
-                <a href="/home"
-                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">Chào
-                    mừng: @User.Identity.Name</a>
-                <a href="/account/logout"
-                    style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
-                    XUẤT</a>
-            }
-            else
-            {
-                <a href="/account/login"
-                    style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
-                    NHẬP</a>
-            }
-        </div>
-    </nav>
-
+            <a href="/account/logout" style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none; font-size: 0.95rem; font-weight: 600;">
+                ĐĂNG XUẤT
+            </a>
+        }
+        else
+        {
+            <a href="/account/login" style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none; font-size: 0.95rem; font-weight: 600;">
+                ĐĂNG NHẬP
+            </a>
+        }
+    </div>
+</nav>
     <!-- Main Content -->
     <div class="main-container">
         <div class="top-bar">
