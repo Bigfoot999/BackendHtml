@@ -11,7 +11,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace BackendHtml.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20250602085630_InitialCreate")]
+    [Migration("20250606035351_InitialCreate")]
     partial class InitialCreate
     {
         /// <inheritdoc />
@@ -100,7 +100,7 @@ namespace BackendHtml.Migrations
                     b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("LoginRegisterExample.Models.User", b =>
+            modelBuilder.Entity("BackendHtml.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");

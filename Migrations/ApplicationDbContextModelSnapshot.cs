@@ -97,7 +97,7 @@ namespace BackendHtml.Migrations
                     b.ToTable("Contacts");
                 });
 
-            modelBuilder.Entity("LoginRegisterExample.Models.User", b =>
+            modelBuilder.Entity("BackendHtml.Models.User", b =>
                 {
                     b.Property<string>("Id")
                         .HasColumnType("text");
