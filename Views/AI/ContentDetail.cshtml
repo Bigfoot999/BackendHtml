@@ -304,9 +304,9 @@
             </a>
             <a href="/">Trang chủ</a>
             <a href="/forum">Cộng đồng</a>
-            <a href="/contact/contact">Liên hệ</a>
             <a href="/ai/usercontent">Quản lý bài viết</a>
-            <a href="#">Quản lý tài khoản</a>
+            <a href="/contact/contact">Liên hệ</a>
+            @* <a href="#">Quản lý tài khoản</a> *@
         </div>
         <div class="right">
             @if (User.Identity != null && User.Identity.IsAuthenticated)
@@ -331,10 +331,10 @@
     <div class="main-container">
         <div class="top-bar">
             <div class="title-section">Khám Phá Những Món Ngon Việt Nam</div>
-            <input type="text" placeholder="Tìm kiếm món ăn..." />
+            @* <input type="text" placeholder="Tìm kiếm món ăn..." /> *@
         </div>
 
-        <div class="filter">
+        @* <div class="filter">
             <label style="margin-right: 10px;">Điều kiện lọc:</label>
             <select>
                 <option>Tất cả</option>
@@ -342,7 +342,7 @@
                 <option>Chờ duyệt</option>
                 <option>Đã xóa</option>
             </select>
-        </div>
+        </div> *@
 
         <div class="article-section">
             <h2>Công Thức Nấu Ăn Hấp Dẫn</h2>
