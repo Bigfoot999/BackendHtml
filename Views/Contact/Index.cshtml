@@ -153,7 +153,7 @@
             </a>
             <a href="/" style="color: white; text-decoration: none; margin-left: 1.5rem;">Trang chủ</a>
             <a href="/home/forum" style="color: white; text-decoration: none; margin-left: 1.5rem;">Cộng đồng</a>
-            <a href="/ai/usercontent" style="color: white; text-decoration: none; margin-left: 1.5rem; font-size: 1rem; font-weight: 500;">Quản lý bài viết</a>
+            
             @if (User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name == "admin")
             {
 
@@ -170,9 +170,14 @@
 
 
             }
+            else if (User.Identity != null && User.Identity.IsAuthenticated)
+            {
+                <a href="/ai/usercontent" style="color: white; text-decoration: none; margin-left: 1.5rem; font-size: 1rem; font-weight: 500;">Quản lý bài viết</a>
+                <a href="/contact/contact" style="color: white; text-decoration: none; margin-left: 1.5rem;">Contact</a>
+            }
             else
             {
-                <a href="/contact/contact" style="color: white; text-decoration: none; margin-left: 1.5rem;">Contact</a>
+                <a href="/contact/contact" style="color: white; text-decoration: none; margin-left: 1.5rem;">Liên hệ</a>
             }
 
         </div>
@@ -186,7 +191,7 @@
                     style="background-color: black; color: #00FFAA; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
                     XUẤT</a>
             }
-            else
+            else 
             {
                 <a href="/account/login"
                     style="border: 2px solid white; color: white; padding: 0.4rem 1rem; border-radius: 12px; text-decoration: none;">ĐĂNG
