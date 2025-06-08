@@ -31,7 +31,22 @@
             display: flex;
             gap: 10px;
         }
-
+        .btn-search {
+            padding: 8px 12px; /* Giảm kích thước padding để nút nhỏ hơn */
+            border-radius: 8px; /* Đồng bộ bo góc với select */
+            border: none;
+            cursor: pointer;
+            font-weight: 600;
+            background-color: #f9a825;
+            color: white;
+            font-size: 10px; /* Giảm font-size để cân đối */
+            height: 38px; /* Đồng bộ chiều cao với select */
+            transition: background-color 0.3s ease;
+        }
+        .btn-search:hover {
+            background-color: #e08f00; /* Tối màu khi hover để tạo hiệu ứng */
+            transform: translateY(-2px); /* Hiệu ứng nâng nhẹ khi hover */
+        }
         .btn-login,
         .btn-signup,
         .btn-create {
@@ -79,7 +94,7 @@
         .form-select {
             margin: 20px 0;
             display: flex;
-            justify-content: flex-end;
+            justify-content: space-between;
             align-items: center;
         }
 
@@ -173,12 +188,13 @@
             padding: 20px;
             border-radius: 10px;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            font-size: 12px;
         }
 
         .recipe-title {
             color: #4B7322;
             /* Màu xanh giống chữ Tìm kiếm phổ biến */
-            font-size: 24px;
+            font-size: 17px;
             margin-bottom: 20px;
         }
 
@@ -264,7 +280,7 @@
 
         #new-recipe-form h3 {
             color: #4B7322;
-            font-size: 24px;
+            font-size: 17px;
             margin-bottom: 20px;
         }
 
@@ -306,6 +322,7 @@
             </a>
             <a href="/" style="color: white; text-decoration: none; margin-left: 1.5rem;">Trang chủ</a>
             <a href="/home/forum" style="color: white; text-decoration: none; margin-left: 1.5rem;">Cộng đồng</a>
+            <a href="/ai/usercontent" style="color: white; text-decoration: none; margin-left: 1.5rem; font-size: 1rem; font-weight: 500;">Quản lý bài viết</a> 
             @if (User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name == "admin")
             {
 
@@ -509,7 +526,7 @@
                     <img src="@item.ImageUrl" alt="@item.ImageUrl">
                     <div>
                         <a href="/ai/contentdetail/@item.Id">
-                            <h3>@item.Title</h3>
+                            <h3 style = "font-size: 20px">@item.Title</h3>
                         </a>
 
                         <div class="recipe-info">

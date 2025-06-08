@@ -56,6 +56,7 @@
             </a>
             <a href="/" style="color: white; text-decoration: none; margin-left: 1.5rem;">Trang chủ</a>
             <a href="/home/forum" style="color: white; text-decoration: none; margin-left: 1.5rem;">Cộng đồng</a>
+            
             @if (User.Identity != null && User.Identity.IsAuthenticated && User.Identity.Name == "admin")
             {
 
