@@ -97,6 +97,16 @@
             justify-content: space-between;
             align-items: center;
         }
+        
+        .category-search-form {
+            display: flex;
+            align-items: center;
+            gap: 10px; /* Khoảng cách giữa select và button */
+        }
+
+        .category-search-form .form-select {
+            flex: 1; /* hoặc đặt chiều rộng cố định như width: 200px */
+        }
 
         .search-bar {
             display: flex;
@@ -385,7 +395,7 @@
                 }
             </select> *@
 
-            <form method="post" class="form-select">
+            <form method="post" class="category-search-form">
                 <select class="form-select" id="categoryContent" name="category">
                     <option value="@ViewBag.CategoryCurrent">@ViewBag.CategoryCurrent</option>
                     @foreach (Category item in ViewBag.Categorycontent)
